@@ -1,0 +1,98 @@
+_base_: ./blender_hotdog_n8_w3_aggrprune_long_v6_pgan70.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v6_pgan70_x45k
+
+# W3-aggrprune-long_v6_pgan70_x45k (hotdog)
+# ============================================================
+# 目的：在 x30k（PSNR=25.759）末尾仍以 ~0.07 / 1k 步的速率上升、
+# 未到平台的基础上，进一步把训练拉长到 45000 步，确认平台期位置
+# 并刷新 hotdog 的 SOTA 上界。
+#
+# 训练 schedule：
+#   - 前 0..36000 步：把 v6_pgan70 的 15000 步时间锚点 ×2.4 等比拉伸
+#     （prune / co-prune / co-reg / pseudo / GAN 全部按比例放大）。
+#   - 36000..45000 步：尾段 9000 步纯精修。prune 已停，但
+#     pseudo-view + co-reg + PVD-GAN 仍开（end_sample_pseudo=45000）。
+#
+# 与 x30k 的对比锚点（15k → x30k(×1.6) → x45k(×2.4)）：
+#   refine_start_iter:        500  ->  800  -> 1200
+#   refine_stop_iter:       12000  -> 19200 -> 28800
+#   prune.unseen.start:      2000  ->  3200 ->  4800
+#   prune.unseen.every:      3000  ->  4800 ->  7200
+#   prune.unseen.stop:      11500  -> 18400 -> 27600
+#   prune.floater.start:     4000  ->  6400 ->  9600
+#   prune.floater.every:     2500  ->  4000 ->  6000
+#   prune.floater.stop:     11500  -> 18400 -> 27600
+#   thresh_bin_decay_start:  4000  ->  6400 ->  9600
+#   thresh_bin_decay_end:   11500  -> 18400 -> 27600
+#   coprune_start:           1500  ->  2400 ->  3600
+#   coprune_stop:           11500  -> 18400 -> 27600
+#   coprune_every:            500  ->   800 ->  1200
+#   pvd.start:               2000  ->  3200 ->  4800
+#   pvd.warmup:              6000  ->  9600 -> 14400
+#
+# LR schedule：
+#   `optim.means_lr_final_factor=0.01` 不变，由 `_MeansLRScheduler`
+#   在 45000 步内衰减到 1%。前段平均 LR 比 v6_pgan70(15k) 偏高约 6×
+#   ——结果与原 v6_pgan70 严格不可比，与 x30k 也是不同 LR 曲线，
+#   适合"找平台期"的探索目的。
+#
+# Snapshot 策略：
+#   - prune 触发时刻：仍按 save_pre_prune_ckpt 存（共 ~8 个）。
+#   - 尾段 36000 起每 1500 步追加一个 periodic snapshot
+#     （36000 / 37500 / 39000 / 40500 / 42000 / 43500，共 6 个）。
+#   - 训练结束 + final test 之后，对所有 snapshot 跑 full test，
+#     metrics 写入 eval_log.jsonl + metrics.json:pre_prune_test，
+#     选 PSNR 最大者写到 metrics.json:best_*，然后**删除所有
+#     snapshot 文件**——磁盘最终零残留。
+#
+# 预算：训练 ~93 分钟（按 x30k 62min × 1.5 线性外推） +
+# 14 个 snapshot × ~10s ≈ 2.5 分钟，共 ~95 分钟。
+# 单 ckpt ~80MB，峰值 14×80=1.12GB，结束清零。
+# ============================================================
+
+train:
+  iterations: 45000
+  # periodic snapshots：尾段 36000 起每 1500 步保存一次，
+  # 复用 pre-prune snapshot 的 save→end-test→delete 通道。
+  periodic_ckpt_every: 1500
+  periodic_ckpt_start: 36000
+  save_pre_prune_ckpt: true
+
+strategy:
+  refine_start_iter: 1200       # 500 ×2.4
+  refine_stop_iter: 28800       # 12000 ×2.4
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 4800          # 2000 ×2.4
+      every_iter: 7200          # 3000 ×2.4
+      stop_iter: 27600          # 11500 ×2.4
+    floater:
+      enabled: true
+      start_iter: 9600          # 4000 ×2.4
+      every_iter: 6000          # 2500 ×2.4
+      stop_iter: 27600          # 11500 ×2.4
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 9600    # 4000 ×2.4
+      thresh_bin_decay_end: 27600     # 11500 ×2.4
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 3600      # 1500 ×2.4
+  coprune_stop_iter: 27600      # 11500 ×2.4
+  coprune_every_iter: 1200      # 500 ×2.4
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 45000      # 全程 pseudo + co-reg + GAN
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 4800            # 2000 ×2.4
+    floater_guidance:
+      warmup_iter: 14400        # 6000 ×2.4
