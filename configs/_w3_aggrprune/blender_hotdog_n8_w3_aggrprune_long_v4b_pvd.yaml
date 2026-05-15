@@ -1,0 +1,78 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v4b_pvd
+
+# W3-aggrprune-long_v4b_pvd (hotdog) —— 与 drums v4b 同构
+#
+# v4 → v4b 的唯一改动：
+#   dual_gs.end_sample_pseudo: 15000 → 12000
+#
+# 动机：
+#   1) drums v4_pvd 的 eval_log 显示 val 峰值 16.15 @ step14000，
+#      但 final test=15.56，差 0.59 dB —— val 没崩，是 val→test gap。
+#      最直接的修法：尾段关 pseudo-view + coreg，让最后 3000 步做
+#      纯 train-view 收尾拟合（trainer 中 end_sample_pseudo 同时
+#      控制 pseudo 渲染和 coreg 的结束）。
+#   2) hotdog 的目前最佳是 v3=24.42（>v2=23.15、>aggrprune=23.50），
+#      但 v4_pvd 还没在 hotdog 完整跑过。本配置 = v4_pvd 的 PVD 守护
+#      + v4b 的尾段干净拟合，期待对 hotdog 进一步提升 0.2~0.5 dB。
+#
+# 其他与 hotdog v4_pvd 完全一致：last prune @11500、PVD D-only、
+# floater_guidance 从 6000 起 OR-增强 floater-prune。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 12000   # ← v4b 唯一改动：原 15000 → 12000
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 2.0e-4
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6
+      warmup_iter: 6000
+      min_fake_logit_gap: 0.5
+      n_pseudo_views: 4

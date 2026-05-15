@@ -1,0 +1,24 @@
+_base_: ../_w2sota_view/lego_n8_w2_sotaview.yaml
+
+experiment:
+  name: lego_n8_w3_dual_gs
+
+# C-stage: CoR-GS dual-GS — second independently-initialized field +
+# co-regularization on pseudo cams + co-pruning of inconsistent points.
+# Hyperparameters validated on chair (single-scene smoke test); same
+# values applied to all 8 scenes to keep the comparison fair.
+dual_gs:
+  enabled: true
+  seed_gs1: 43
+  coreg: true
+  coreg_weight: 1.0
+  start_sample_pseudo: 500
+  end_sample_pseudo: 7000
+  sample_pseudo_interval: 1
+  pseudo_t_range: [0.2, 0.8]
+  coprune: true
+  coprune_threshold: 0.10
+  coprune_start_iter: 1500
+  coprune_stop_iter: 6500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.10

@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_room_n3_dav2s",
+  "scene": "room",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 157.42885780334473,
+  "num_gaussians": 180000,
+  "num_test_views_used": 6,
+  "num_test_views_total": 6,
+  "train_view_ids": [
+    1,
+    20,
+    39
+  ],
+  "metrics": {
+    "test/psnr": 12.988829453786215,
+    "test/ssim": 0.45811361571153003,
+    "test/lpips": 0.6025278071562449
+  }
+}

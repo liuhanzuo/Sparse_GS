@@ -1,0 +1,72 @@
+_base_: ../_w3_dual_gs/blender_ship_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_ship_n8_w3_aggrprune_long_v5_widepvd
+
+# W3-aggrprune-long_v5_widepvd (ship)
+# 与 drums/hotdog v5_widepvd 完全相同的超参。详见 drums v5_widepvd 注释。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000
+
+pseudo:
+  wide_sampling:
+    enabled: true
+    mode_probs: [0.4, 0.3, 0.3]
+    interp_t_range: [0.25, 0.75]
+    extrap_t_range: [-0.3, 1.3]
+    elevation_margin_deg: 10.0
+    radius_jitter: 0.05
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 2.0e-4
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6
+      warmup_iter: 6000
+      min_fake_logit_gap: 0.5
+      n_pseudo_views: 4

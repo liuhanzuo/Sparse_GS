@@ -1,0 +1,1 @@
+{"step": 200, "phase": "test", "num_gaussians": 100000, "test/psnr": 15.079388513565064, "test/ssim": 0.723002680838108, "test/lpips": 0.5226353132724761, "wall_clock_sec": 35.5022919178009}

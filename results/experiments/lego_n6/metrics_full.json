@@ -1,0 +1,24 @@
+{
+  "experiment": "lego_n6",
+  "scene": "lego",
+  "type": "nerf_synthetic",
+  "n_train_views": 6,
+  "ckpt": "last.pt",
+  "num_gaussians": 404153,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "wall_clock_eval_sec": 20.639087438583374,
+  "train_view_ids": [
+    0,
+    20,
+    40,
+    59,
+    79,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 17.64096083641052,
+    "test/ssim": 0.7465239173173904,
+    "test/lpips": 0.29509175606071947
+  }
+}

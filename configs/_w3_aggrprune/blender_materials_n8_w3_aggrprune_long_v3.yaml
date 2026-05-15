@@ -1,0 +1,46 @@
+_base_: ../_w3_dual_gs/blender_materials_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_materials_n8_w3_aggrprune_long_v3
+
+# W3-aggrprune-long_v3 (materials)
+#
+# 现状：materials 是当前最差的场景（w3_aggrprune final = 12.78,
+# 比 vanilla 14.79 还差！），说明在原 7k 短调度下 aggrprune 把
+# 必要的 specular/反射 Gaussian 误杀。
+# 期望：长程 + linear-decay 把伤害降到可控，让 densify 有时间补回。
+#
+# 与 hotdog v3 共用 schedule。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000

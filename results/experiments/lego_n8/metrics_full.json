@@ -1,0 +1,26 @@
+{
+  "experiment": "lego_n8",
+  "scene": "lego",
+  "type": "nerf_synthetic",
+  "n_train_views": 8,
+  "ckpt": "last.pt",
+  "num_gaussians": 405948,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "wall_clock_eval_sec": 19.48227620124817,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 19.211383910179137,
+    "test/ssim": 0.7886582139134407,
+    "test/lpips": 0.23379033157601953
+  }
+}

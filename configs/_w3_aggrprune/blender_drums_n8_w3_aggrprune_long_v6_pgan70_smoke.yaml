@@ -1,0 +1,17 @@
+_base_: ./blender_drums_n8_w3_aggrprune_long_v6_pgan70.yaml
+
+experiment:
+  name: blender_drums_n8_w3_aggrprune_long_v6_pgan70_smoke
+
+# Smoke for v6 (Option B): tiny 200-iter run that actually exercises the
+# new D arch + DiffAug + G adv path; not for evaluation.
+
+train:
+  iterations: 200
+
+ssl:
+  pvd:
+    start_iter: 50          # exercise D + G adv inside the smoke window
+    every: 4
+    floater_guidance:
+      enabled: false        # skip warmup gating; smoke only checks finite numbers

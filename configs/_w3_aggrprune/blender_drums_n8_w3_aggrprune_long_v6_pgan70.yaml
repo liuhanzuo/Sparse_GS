@@ -1,0 +1,32 @@
+_base_: ./blender_drums_n8_w3_aggrprune_long_v5_widepvd.yaml
+
+experiment:
+  name: blender_drums_n8_w3_aggrprune_long_v6_pgan70
+
+# W3-aggrprune-long_v6_pgan70 (drums)
+#
+# Option B (真做 GAN)。在 v5_widepvd 基础上：
+#   1) Discriminator 改成正经 70x70 PatchGAN（pix2pix 风格，
+#      conv s=2 *3 + conv s=1 + 4x4 head；感受野 70x70）。
+#      之前默认是 stride=2 *3 + 3x3 head，实际感受野约 38x38，
+#      patch 太大反而像"全图判别"，对 floater 这种小区域伪影信号弱。
+#   2) DiffAug（color/translation/cutout，real/fake 共享同一组随机
+#      参数）。real 端我们只有 8 张 GT，分布太窄；DiffAug 让 D 的
+#      "真"分布显著扩展，避免 D 学到"GT 色调/构图"而非 floater 纹理。
+#   3) G adv weight 从 0.0 -> 5e-3 (detach_geometry=true 保护几何)，
+#      让 D 的梯度真正反推到 G 渲染，而不是 v4/v5 的"纯诊断器"。
+#
+# 其余（pseudo wide_sampling、SSL multiview/depth、aggrprune）继承 v5。
+
+ssl:
+  pvd:
+    arch: pix2pix70           # <<< 70x70 PatchGAN
+    weight: 5.0e-3            # <<< 真做 GAN：开 G adv（detach_geometry 保护几何）
+    augment_diffaug:
+      enabled: true
+      color: true
+      translation: 0.125
+      cutout: 0.5
+      brightness: 0.5
+      saturation: 2.0
+      contrast: 1.5

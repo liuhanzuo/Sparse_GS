@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_chair_n8_w3_dual_gs",
+  "scene": "chair",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 797.3831939697266,
+  "num_gaussians": 415014,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 25.853836145401,
+    "test/ssim": 0.9273816594481468,
+    "test/lpips": 0.07836327608674765
+  }
+}

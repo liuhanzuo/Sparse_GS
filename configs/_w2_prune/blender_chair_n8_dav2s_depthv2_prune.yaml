@@ -1,0 +1,28 @@
+_base_: ../_depth_v2/blender_chair_n8_dav2s_depthv2.yaml
+
+experiment:
+  name: blender_chair_n8_ssl_mv_dav2s_depthv2_prune
+
+# W2: DNGaussian-style unseen prune + lightweight SparseGS-style floater prune.
+# Both branches are post-densify, run after ``DefaultStrategy.step_post_backward``
+# and after ``_enforce_cap_max``. Defaults below are intentionally conservative:
+#  - ``unseen`` runs every 2k steps from 2k onward (densify_until_iter=15000
+#    in the gsplat strategy, so we get 3 hits during densify + 1 in cleanup).
+#  - ``floater`` starts later (4k) because it relies on a reasonably converged
+#    depth field, and is gated by ``safety_max_ratio`` to refuse any single
+#    step that would prune > 5% of all Gaussians.
+strategy:
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 2000
+      stop_iter: 6500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2000
+      stop_iter: 6500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      safety_max_ratio: 0.08

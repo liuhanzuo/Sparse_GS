@@ -1,0 +1,9 @@
+_base_: ../_w3_dual_gs/blender_mic_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_mic_n8_w3_nofloater
+
+strategy:
+  prune:
+    floater:
+      enabled: false

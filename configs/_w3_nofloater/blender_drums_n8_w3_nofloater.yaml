@@ -1,0 +1,10 @@
+_base_: ../_w3_dual_gs/blender_drums_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_drums_n8_w3_nofloater
+
+# W3-nofloater: see _w3_nofloater/blender_chair_n8_w3_nofloater.yaml.
+strategy:
+  prune:
+    floater:
+      enabled: false

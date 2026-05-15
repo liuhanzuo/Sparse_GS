@@ -1,0 +1,14 @@
+_base_: ../_w3_dual_gs/blender_drums_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_drums_n8_w3_lpips
+
+# See blender_chair_n8_w3_lpips.yaml for rationale.
+ssl:
+  perceptual:
+    enabled: true
+    weight: 0.05
+    net: vgg
+    every: 4
+    start_iter: 1000
+    patch_size: 256

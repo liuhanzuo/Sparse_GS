@@ -1,0 +1,196 @@
+{
+  "scenes": [
+    "chair",
+    "drums",
+    "ficus",
+    "hotdog",
+    "lego",
+    "materials",
+    "mic",
+    "ship"
+  ],
+  "rows": [
+    {
+      "scene": "chair",
+      "baseline": {
+        "run": "blender_chair_n8",
+        "psnr": 20.08418920993805,
+        "ssim": 0.8513002470135689,
+        "lpips": 0.18925259541720152,
+        "n_gauss": 498182,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_chair_n8_ssl_mv_dav2s",
+        "psnr": 22.194775657653807,
+        "ssim": 0.8768422949314117,
+        "lpips": 0.1639386553503573,
+        "n_gauss": 485001,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "drums",
+      "baseline": {
+        "run": "blender_drums_n8",
+        "psnr": 13.880076284408569,
+        "ssim": 0.7215533497929573,
+        "lpips": 0.3325556719303131,
+        "n_gauss": 851827,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_drums_n8_ssl_mv_dav2s",
+        "psnr": 15.02346715450287,
+        "ssim": 0.7530892080068589,
+        "lpips": 0.3045890403538942,
+        "n_gauss": 1231610,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "ficus",
+      "baseline": {
+        "run": "blender_ficus_n8",
+        "psnr": 22.144848737716675,
+        "ssim": 0.8993561041355133,
+        "lpips": 0.09766833349131047,
+        "n_gauss": 216598,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_ficus_n8_ssl_mv_dav2s",
+        "psnr": 21.84371792793274,
+        "ssim": 0.8956527075171471,
+        "lpips": 0.100501101417467,
+        "n_gauss": 275817,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "hotdog",
+      "baseline": {
+        "run": "blender_hotdog_n8",
+        "psnr": 17.746559019088746,
+        "ssim": 0.831548057794571,
+        "lpips": 0.2980008118599653,
+        "n_gauss": 317014,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_hotdog_n8_ssl_mv_dav2s",
+        "psnr": 18.39197368621826,
+        "ssim": 0.8648494204878807,
+        "lpips": 0.2734895994421095,
+        "n_gauss": 325594,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "lego",
+      "baseline": {
+        "run": "lego_n8",
+        "psnr": 19.211383910179137,
+        "ssim": 0.7886582139134407,
+        "lpips": 0.23379033157601953,
+        "n_gauss": 405948,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "lego_n8_ssl_mv_dav2s",
+        "psnr": 21.157960929870605,
+        "ssim": 0.8290984535217285,
+        "lpips": 0.20215106807649136,
+        "n_gauss": 372305,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "materials",
+      "baseline": {
+        "run": "blender_materials_n8",
+        "psnr": 14.791176042556764,
+        "ssim": 0.7556771156191826,
+        "lpips": 0.27280965439975263,
+        "n_gauss": 521502,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_materials_n8_ssl_mv_dav2s",
+        "psnr": 16.259120626449587,
+        "ssim": 0.7840730208158493,
+        "lpips": 0.2456047535315156,
+        "n_gauss": 501901,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "mic",
+      "baseline": {
+        "run": "blender_mic_n8",
+        "psnr": 21.277649183273315,
+        "ssim": 0.9208983653783798,
+        "lpips": 0.12800081121735274,
+        "n_gauss": 419064,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_mic_n8_ssl_mv_dav2s",
+        "psnr": 23.134992952346803,
+        "ssim": 0.9303244563937187,
+        "lpips": 0.11195004881359637,
+        "n_gauss": 525574,
+        "wall": null,
+        "n_test_views": 200
+      }
+    },
+    {
+      "scene": "ship",
+      "baseline": {
+        "run": "blender_ship_n8",
+        "psnr": 15.736599326133728,
+        "ssim": 0.6475810411572457,
+        "lpips": 0.34886516161262987,
+        "n_gauss": 723068,
+        "wall": null,
+        "n_test_views": 200
+      },
+      "dav2s": {
+        "run": "blender_ship_n8_ssl_mv_dav2s",
+        "psnr": 16.94334316253662,
+        "ssim": 0.6806559783220291,
+        "lpips": 0.3217361258715391,
+        "n_gauss": 781435,
+        "wall": null,
+        "n_test_views": 200
+      }
+    }
+  ],
+  "avg": {
+    "psnr": {
+      "baseline": 18.10906021416187,
+      "dav2s": 19.36866901218891
+    },
+    "ssim": {
+      "baseline": 0.8020715618506074,
+      "dav2s": 0.826823192499578
+    },
+    "lpips": {
+      "baseline": 0.23761792143806815,
+      "dav2s": 0.2154950491071213
+    }
+  }
+}

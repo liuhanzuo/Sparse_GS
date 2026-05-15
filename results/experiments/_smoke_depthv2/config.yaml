@@ -1,0 +1,97 @@
+experiment:
+  name: _smoke_depthv2
+  output_dir: outputs
+  seed: 42
+  device: cuda
+data:
+  type: nerf_synthetic
+  root: D:\SSL\sparse_gs\data\nerf_synthetic
+  scene: _mini
+  n_train_views: 4
+  train_view_ids: null
+  image_downsample: 1
+  white_background: true
+  depth_prior:
+    enabled: true
+    backend: alpha
+    tag: alpha_depth
+    kind: disparity
+    required: false
+model:
+  sh_degree: 3
+  init:
+    type: random_in_box
+    num_points: 20000
+    extent: 1.0
+    rgb_init: 0.5
+  scale_init_factor: 0.01
+renderer:
+  near_plane: 0.01
+  far_plane: 1.0e10
+  rasterize_mode: antialiased
+  packed: false
+  absgrad: true
+  render_mode: RGB+ED
+strategy:
+  type: default
+  prune_opa: 0.005
+  grow_grad2d: 0.0002
+  grow_scale3d: 0.01
+  prune_scale3d: 0.1
+  refine_start_iter: 40
+  refine_stop_iter: 120
+  refine_every: 40
+  reset_every: 90
+  absgrad: true
+  revised_opacity: false
+  verbose: false
+optim:
+  means_lr: 0.00016
+  scales_lr: 0.005
+  quats_lr: 0.001
+  opacities_lr: 0.05
+  sh0_lr: 0.0025
+  shN_lr: 0.000125
+  means_lr_final_factor: 0.01
+  eps: 1.0e-15
+train:
+  iterations: 180
+  batch_size: 1
+  shuffle: true
+  log_every: 30
+  eval_every: 90
+  save_every: 180
+  ssim_lambda: 0.2
+ssl:
+  multiview_photo:
+    enabled: false
+    weight: 0.0
+  depth_consist:
+    enabled: true
+    weight: 0.05
+    start_iter: 10
+    alpha_thresh: 0.1
+    space: disparity
+    depth_eps: 0.001
+    global_weight: 1.0
+    local_weight: 0.5
+    grad_weight: 0.2
+    local_patch_size: 32
+    local_n_patches: 4
+  pseudo_view:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0
+  ema_teacher:
+    enabled: false
+    momentum: 0.995
+  patch_gan:
+    enabled: false
+    weight: 0.0
+eval:
+  render_test_at_end: true
+  num_test_renders: 4
+  lpips: true
+  lpips_net: vgg

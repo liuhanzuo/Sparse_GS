@@ -1,0 +1,21 @@
+{
+  "experiment": "_smoke_patch_gan",
+  "scene": "_mini",
+  "n_train_views": 4,
+  "iterations": 160,
+  "wall_clock_sec": 10.211862564086914,
+  "num_gaussians": 22216,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "train_view_ids": [
+    0,
+    2,
+    5,
+    7
+  ],
+  "metrics": {
+    "test/psnr": 14.636171817779541,
+    "test/ssim": 0.7989241778850555,
+    "test/lpips": 0.3293028213083744
+  }
+}

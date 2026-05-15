@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_drums_n8_ssl_mv_dav2s_gan_small",
+  "scene": "drums",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 329.07404351234436,
+  "num_gaussians": 1192830,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 14.958653802871703,
+    "test/ssim": 0.752510798573494,
+    "test/lpips": 0.3083763966709375
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_trex_n3_baseline",
+  "scene": "trex",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 85.44366025924683,
+  "num_gaussians": 180000,
+  "num_test_views_used": 7,
+  "num_test_views_total": 7,
+  "train_view_ids": [
+    1,
+    28,
+    54
+  ],
+  "metrics": {
+    "test/psnr": 11.768929890223912,
+    "test/ssim": 0.38145393984658377,
+    "test/lpips": 0.5950627837862287
+  }
+}

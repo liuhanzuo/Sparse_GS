@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_ficus_n8_w3_dual_gs",
+  "scene": "ficus",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 629.1304516792297,
+  "num_gaussians": 300922,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 24.147980518341065,
+    "test/ssim": 0.9323017767071724,
+    "test/lpips": 0.06132648930884898
+  }
+}

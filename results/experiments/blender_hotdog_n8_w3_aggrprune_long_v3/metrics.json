@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_hotdog_n8_w3_aggrprune_long_v3",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 15000,
+  "wall_clock_sec": 1957.1317675113678,
+  "num_gaussians": 337486,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 24.4223863363266,
+    "test/ssim": 0.9298149260878563,
+    "test/lpips": 0.11328997770324349
+  }
+}

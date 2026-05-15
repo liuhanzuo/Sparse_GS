@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_trex_n3_dav2s",
+  "scene": "trex",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 161.16409730911255,
+  "num_gaussians": 180000,
+  "num_test_views_used": 7,
+  "num_test_views_total": 7,
+  "train_view_ids": [
+    1,
+    28,
+    54
+  ],
+  "metrics": {
+    "test/psnr": 13.929123606000628,
+    "test/ssim": 0.3898345487458365,
+    "test/lpips": 0.5574283259255546
+  }
+}

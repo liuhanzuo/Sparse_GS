@@ -1,0 +1,36 @@
+_base_: ./blender_hotdog_n8_w3_aggrprune_long_v4_pvd.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v4_pvd_smoke
+
+# 50-step smoke test: enable PVD with a tiny start_iter so D fires
+# inside the run; confirm trainer integrates without crashing.
+
+train:
+  iterations: 50
+
+strategy:
+  refine_start_iter: 10
+  refine_stop_iter: 49
+  prune:
+    unseen:
+      enabled: false
+    floater:
+      enabled: false
+
+dual_gs:
+  coprune: false
+  end_sample_pseudo: 50
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 5
+    every: 2
+    weight: 0.001
+    patch_size: 64
+    base_channels: 16
+    floater_guidance:
+      enabled: true
+      warmup_iter: 5
+      min_fake_logit_gap: 999.0    # never trust D in 50-step smoke; just exercise code paths

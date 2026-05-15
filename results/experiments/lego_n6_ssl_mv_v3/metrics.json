@@ -1,0 +1,24 @@
+{
+  "experiment": "lego_n6_ssl_mv_v3",
+  "scene": "lego",
+  "type": "nerf_synthetic",
+  "n_train_views": 6,
+  "ckpt": "last.pt",
+  "num_gaussians": 456981,
+  "num_test_views_used": 20,
+  "num_test_views_total": 200,
+  "wall_clock_eval_sec": 7.366174221038818,
+  "train_view_ids": [
+    0,
+    20,
+    40,
+    59,
+    79,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 17.617204666137695,
+    "test/ssim": 0.7538205564022065,
+    "test/lpips": 0.2979178734123707
+  }
+}

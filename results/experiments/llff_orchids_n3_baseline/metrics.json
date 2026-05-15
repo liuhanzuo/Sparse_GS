@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_orchids_n3_baseline",
+  "scene": "orchids",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 83.6872947216034,
+  "num_gaussians": 180000,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "train_view_ids": [
+    1,
+    12,
+    23
+  ],
+  "metrics": {
+    "test/psnr": 14.861905813217163,
+    "test/ssim": 0.41831106692552567,
+    "test/lpips": 0.3852078467607498
+  }
+}

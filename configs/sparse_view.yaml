@@ -1,0 +1,14 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# SSL still off — this file IS the sparse-view L1+DSSIM baseline.

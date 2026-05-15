@@ -1,0 +1,59 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v2
+
+# W3-aggrprune-long_v2: linear-decay thresh_bin
+#
+# 基线 (long): thresh_bin = 0.05 恒定
+#   floater-prune 5 次，平均删 38K Gaussians/次
+#   val_psnr: 24.85 → 19.45 (Δ=−5.40) → 25.79 → 25.89 → 26.07 → 25.93 → 20.58
+#   → final 23.97
+#   每次都崩 5 dB 量级 + 靠 densify 长回来，终点离峰值 −2.1 dB
+#
+# 假设：
+#   1) 早期 floater 多、真假难分，0.05 分位拿到的都是粗糙误差 → 暴力剪
+#      虽然崩但能换来 densify 重生，net positive (24.85 → 26.07)。
+#   2) 后期场景已经收敛，0.05 分位里很多是"有用但 z 偏小"的合规点，
+#      继续用 0.05 是把刚训好的好点又删了，大部分功消耗在恢复上。
+# 解：thresh_bin 从 0.05 线性衰减到 0.01。
+#   step 4000  -> tb ≈ 0.050  ( 早期 5%  分位 )
+#   step 6500  -> tb ≈ 0.040
+#   step 9000  -> tb ≈ 0.030
+#   step 11500 -> tb ≈ 0.020
+#   step 14000 -> tb ≈ 0.010  ( 末端 1%  分位 )
+# 末次 prune 只删 ~6K-8K 而非 30K+，单次崩幅预期 < 1 dB，
+# 最后 1000 步足以恢复到峰值。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 14500
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 14000
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 14000
+      alpha_thresh: 0.5
+      thresh_bin: 0.05            # start of decay
+      thresh_bin_end: 0.01        # end of decay
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 14000
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 14000
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000

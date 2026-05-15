@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_leaves_n3_dav2s",
+  "scene": "leaves",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 144.45889258384705,
+  "num_gaussians": 150000,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "train_view_ids": [
+    1,
+    12,
+    25
+  ],
+  "metrics": {
+    "test/psnr": 12.354689836502075,
+    "test/ssim": 0.21823684126138687,
+    "test/lpips": 0.534490779042244
+  }
+}

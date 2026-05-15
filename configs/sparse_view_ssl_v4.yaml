@@ -1,0 +1,38 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6_ssl_v4
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# v4: very conservative SSL — teacher built late (after most densification
+# is done), low weights, frozen snapshot only. Goal: verify that SSL is
+# *at least neutral*, then start growing the weights.
+ssl:
+  ema_teacher:
+    enabled: true
+    weight: 0.02            # halved vs v3
+    momentum: 1.0
+    snapshot_every: 2000
+    build_iter: 4500        # >> than v3's 2000; lets photo loss saturate first
+    start_iter: 5000
+    ssim_lambda: 0.0        # pure L1 — SSIM on near-identical images is noisy
+
+  pseudo_view:
+    enabled: true
+    weight: 0.05            # halved vs v3
+    start_iter: 5000
+    ssim_lambda: 0.1
+    t_range: [0.3, 0.7]
+    alpha_thresh: 0.5
+    detach_geometry: true
+
+  multiview_photo: {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}

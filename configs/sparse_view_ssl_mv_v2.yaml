@@ -1,0 +1,49 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6_ssl_mv_v2
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# v2: multiview_photo + forward-backward depth occlusion check.
+#
+# Motivation. v1 of multiview_photo gave +3.13 dB at n=6 but only +0.92 dB at
+# n=3, where baselines are wider and mutual occlusion is heavier. Any pixel
+# of cam A that projects into cam B's frustum contributes to the loss even
+# if A is occluded in B — this manifests as false photometric "disagreements"
+# that push the geometry the wrong way.
+#
+# The occlusion check renders the student depth from cam B (no grad, a
+# mask-only branch), samples it at the projected uv, and drops every pixel
+# where |z_b - D_b(uv)| / z_b > tau. It also drops pixels where cam B's
+# student alpha is too low (cam B saw nothing there, so there is no
+# meaningful depth to compare against).
+#
+# Tau = 0.05 is a conservative default: 5% relative depth disagreement is
+# looser than typical floaters but tight enough to catch genuine occlusion.
+# Increase alpha_thresh if you want to be stricter about "cam B must have
+# seen something solid at the projection site".
+ssl:
+  multiview_photo:
+    enabled: true
+    weight: 0.10
+    start_iter: 1500
+    n_neighbors: 1
+    alpha_thresh: 0.5
+    ssim_lambda: 0.0
+    depth_eps: 0.001
+    # --- new in v2 ---
+    occlusion_check: true
+    occlusion_tau: 0.05
+    occlusion_alpha_thresh: 0.5
+
+  ema_teacher:     {enabled: false, weight: 0.0}
+  pseudo_view:     {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}

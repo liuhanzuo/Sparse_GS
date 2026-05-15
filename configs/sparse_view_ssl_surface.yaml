@@ -1,0 +1,70 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6_ssl_surface
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# Surface-aware SSL: combine the proven v3 multiview-photo signal with
+# two geometric priors that bias the field toward a clean surface,
+# which is the SparseSurf-style objective and the natural extension
+# from "good novel-view PSNR" to "good extracted mesh".
+#
+#   surface_flatten — push every Gaussian's smallest scale toward 0
+#       (ratio mode = scale-invariant aspect-ratio penalty, à la 2DGS /
+#       PGSR). Each Gaussian becomes a 2D surfel; the union of surfels
+#       converges to a surface as densification proceeds.
+#
+#   normal_smooth — TV on the per-pixel normal derived from the
+#       student's own rendered depth. This is purely self-supervised
+#       (no external prior, no DINO, no monocular depth) and pulls
+#       textureless regions toward a piecewise-smooth manifold without
+#       fighting the photometric loss.
+#
+# Both losses are gated by start_iter so the field can densify and the
+# photo loss can find a coarse geometry first; we then switch on the
+# surface bias gradually.
+ssl:
+  multiview_photo:
+    enabled: true
+    weight: 0.10
+    start_iter: 1500
+    n_neighbors: 1
+    alpha_thresh: 0.5
+    ssim_lambda: 0.0
+    depth_eps: 0.001
+    occlusion_check: true
+    occlusion_start_iter: 3000
+    occlusion_tau: 0.10
+    occlusion_alpha_thresh: 0.3
+
+  surface_flatten:
+    enabled: true
+    # Small weight: this term is on every Gaussian, so even a modest
+    # weight drives a strong global bias. Conservative default.
+    weight: 0.01
+    start_iter: 2000
+    mode: ratio          # scale-invariant
+    opacity_thresh: 0.05  # only mature Gaussians; spare freshly-cloned ones
+
+  normal_smooth:
+    enabled: true
+    # Per-pixel angular TV. Coverage is high (whole foreground) so the
+    # weight needs to be small to avoid overwhelming the photo loss.
+    weight: 0.02
+    start_iter: 2500     # after multiview_photo's occlusion gate kicks in
+    alpha_thresh: 0.5
+    depth_eps: 0.001
+    edge_aware: true     # let RGB texture edges pass through
+    edge_lambda: 10.0
+
+  ema_teacher:     {enabled: false, weight: 0.0}
+  pseudo_view:     {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}

@@ -1,0 +1,25 @@
+{
+  "experiment": "w1_smoke_lego_n8_pearson_2k",
+  "scene": "lego",
+  "n_train_views": 8,
+  "iterations": 2000,
+  "wall_clock_sec": 65.38324737548828,
+  "num_gaussians": 320350,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 15.364630227088929,
+    "test/ssim": 0.7242341759800911,
+    "test/lpips": 0.32041442409157755
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_drums_n8_w3_aggrprune_long_v6_pgan70_smoke",
+  "scene": "drums",
+  "n_train_views": 8,
+  "iterations": 200,
+  "wall_clock_sec": 35.5022919178009,
+  "num_gaussians": 100000,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 15.079388513565064,
+    "test/ssim": 0.723002680838108,
+    "test/lpips": 0.5226353132724761
+  }
+}

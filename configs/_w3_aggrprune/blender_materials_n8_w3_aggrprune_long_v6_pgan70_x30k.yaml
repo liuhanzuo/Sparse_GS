@@ -1,0 +1,51 @@
+_base_: ./blender_materials_n8_w3_aggrprune_long_v6_pgan70.yaml
+
+experiment:
+  name: blender_materials_n8_w3_aggrprune_long_v6_pgan70_x30k
+
+# W3-aggrprune-long_v6_pgan70_x30k (materials)
+# 同 hotdog/drums x30k：v6_pgan70 的 15000 步等比拉伸到 24000，
+# 再加 6000 步尾段精修，共 30000 步。详见 hotdog_x30k 注释。
+
+train:
+  iterations: 30000
+  periodic_ckpt_every: 1500
+  periodic_ckpt_start: 24000
+  save_pre_prune_ckpt: true
+
+strategy:
+  refine_start_iter: 800
+  refine_stop_iter: 19200
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 3200
+      every_iter: 4800
+      stop_iter: 18400
+    floater:
+      enabled: true
+      start_iter: 6400
+      every_iter: 4000
+      stop_iter: 18400
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 6400
+      thresh_bin_decay_end: 18400
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 2400
+  coprune_stop_iter: 18400
+  coprune_every_iter: 800
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 30000
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 3200
+    floater_guidance:
+      warmup_iter: 9600

@@ -1,0 +1,80 @@
+_base_: ../_w3_dual_gs/blender_drums_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_drums_n8_w3_aggrprune_long_v4_pvd
+
+# W3-aggrprune-long_v4_pvd (drums)
+#
+# 在 drums 的 v3 (long_v3) schedule 基础上叠加 Pseudo-View Discriminator。
+#
+# 背景：
+#   drums v3 跑到 step=11000 时 val_psnr ≈ 16.06（且实际 run 中断未到 final）；
+#   floater-prune 在 4000/6500 处 PSNR 掉得比 hotdog 厉害（15.47→15.01,
+#   15.84→15.52），说明 depth-quantile 启发式在 drums 这种"鼓皮+鼓架+镲片"
+#   薄结构场景上误杀严重。
+#
+#   PVD 的目的就是用 view-consistency 信号补充 depth 启发式：
+#     - real = train-view GT；fake = pseudo-view 渲染的 patch
+#     - D 学到"真实纹理 vs. 鬼影/floater"的判别后，给 floater-prune 候选
+#       做 OR 增强，避免误杀真实薄结构。
+#
+# 阶段：
+#   - 完全继承 v3 schedule（last prune @ 11500，留 3500 步恢复）
+#   - D 从 step 2000 起每 4 步训一次
+#   - Guidance 从 step 6000 起启用，要求 (real_logit - fake_logit) ≥ 0.5
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0              # D-only mode first; turn on G later if D is healthy
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 2.0e-4
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6
+      warmup_iter: 6000
+      min_fake_logit_gap: 0.5
+      n_pseudo_views: 4

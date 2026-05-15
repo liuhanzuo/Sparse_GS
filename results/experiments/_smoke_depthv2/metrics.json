@@ -1,0 +1,21 @@
+{
+  "experiment": "_smoke_depthv2",
+  "scene": "_mini",
+  "n_train_views": 4,
+  "iterations": 180,
+  "wall_clock_sec": 9.271076917648315,
+  "num_gaussians": 24730,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "train_view_ids": [
+    0,
+    2,
+    5,
+    7
+  ],
+  "metrics": {
+    "test/psnr": 14.682514667510986,
+    "test/ssim": 0.7906971424818039,
+    "test/lpips": 0.35468485578894615
+  }
+}

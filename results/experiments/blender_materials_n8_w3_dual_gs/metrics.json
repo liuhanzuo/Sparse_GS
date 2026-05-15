@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_materials_n8_w3_dual_gs",
+  "scene": "materials",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 787.9732418060303,
+  "num_gaussians": 382508,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 12.736494374275207,
+    "test/ssim": 0.7700286036729813,
+    "test/lpips": 0.2847646455839276
+  }
+}

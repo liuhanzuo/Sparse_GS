@@ -1,0 +1,33 @@
+_base_: ../_w3_dual_gs/blender_drums_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_drums_n8_w3_densitycap
+
+# W3-densitycap: 仅针对 floater 病灶场景（drums 单点先行验证）。
+# 诊断（见 outputs/logs/w3aggr_drums.log）显示 W3 dual-GS / aggrprune
+# 在 drums 上 train PSNR 一路爬到 32~33，但 val PSNR 长期卡在 15。
+# 高斯总数从 step=2000 的 ~22w 一路膨胀到 step=6000 的 ~107w，
+# 而下游的 SparseGS / CoR-GS prune 每轮只能砍掉 0.5%~21%，剪的速度
+# 完全跟不上 densification 撒 floater 的速度——典型“治标不治本”。
+#
+# 该变体不去加强剪枝（那是 aggrprune 的方向），而是从源头收紧
+# densify：让 floater 一开始就长不起来。这正对应 PROJECT_STATUS.md
+# §B3「Sparse-tuned densify strategy: tighter refine_stop_iter / higher
+# grow_grad2d on DefaultStrategy. Cheap experiment, likely +0.3–1 dB
+# 'for free'.」中 DefaultStrategy 的两个旋钮：
+#   1) refine_stop_iter: 15000 -> 3000
+#      base.yaml 设的 15000 等于「densify 全程开」，因为 train 总
+#      iters 才 7000。drums 日志里 step=3000 时 train PSNR 已 30，
+#      足以拟合 8 视角，再继续 split/clone 就是 overfit 训练像素的
+#      白底 floater。3000 是一个明确的硬停。
+#   2) grow_grad2d: 0.0002 -> 0.0006
+#      把 split/clone 的梯度阈值抬高 3x，让真正“需要更多 G 的高频
+#      区域”才触发 densify，过滤掉因为视角稀疏导致大梯度的
+#      floater 候选（这些点在不同训练视图间梯度并不一致，但
+#      DefaultStrategy 用的是 EMA 累积，仍会通过门槛）。
+# 其余 W3 dual-GS 的设定（co-reg / co-prune / SparseGS prune /
+# unseen prune / DAv2 depth / multiview-photo SSL）一概沿用，
+# 这样 PSNR 差异可以干净归因到 densify-cap。
+strategy:
+  refine_stop_iter: 3000
+  grow_grad2d: 0.0006

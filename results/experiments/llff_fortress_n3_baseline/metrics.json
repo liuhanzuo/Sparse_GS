@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_fortress_n3_baseline",
+  "scene": "fortress",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 164.04024410247803,
+  "num_gaussians": 250000,
+  "num_test_views_used": 6,
+  "num_test_views_total": 6,
+  "train_view_ids": [
+    1,
+    21,
+    41
+  ],
+  "metrics": {
+    "test/psnr": 13.58735704421997,
+    "test/ssim": 0.362461194396019,
+    "test/lpips": 0.5428857306639353
+  }
+}

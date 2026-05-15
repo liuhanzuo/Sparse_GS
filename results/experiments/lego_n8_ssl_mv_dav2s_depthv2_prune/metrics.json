@@ -1,0 +1,25 @@
+{
+  "experiment": "lego_n8_ssl_mv_dav2s_depthv2_prune",
+  "scene": "lego",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 297.1839129924774,
+  "num_gaussians": 379717,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 21.556472568511964,
+    "test/ssim": 0.8403715202212334,
+    "test/lpips": 0.1854119608923793
+  }
+}

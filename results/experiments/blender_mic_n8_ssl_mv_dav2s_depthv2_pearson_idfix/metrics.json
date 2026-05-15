@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_mic_n8_ssl_mv_dav2s_depthv2_pearson_idfix",
+  "scene": "mic",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 345.11536979675293,
+  "num_gaussians": 658700,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 22.7471897315979,
+    "test/ssim": 0.9269358003139496,
+    "test/lpips": 0.13014236791059375
+  }
+}

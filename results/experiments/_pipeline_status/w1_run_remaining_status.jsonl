@@ -1,0 +1,3 @@
+{"time": "2026-05-11 22:21:27", "event": "runner_start"}
+{"time": "2026-05-11 22:21:27", "event": "skip", "name": "blender_chair_n8_ssl_mv_dav2s_pearson", "metrics": "D:\\SSL\\sparse_gs\\outputs\\blender_chair_n8_ssl_mv_dav2s_pearson\\metrics.json"}
+{"time": "2026-05-11 22:21:27", "event": "run_start", "name": "blender_drums_n8_ssl_mv_dav2s_pearson", "cmd": ["C:\\Python314\\python.exe", "D:\\SSL\\sparse_gs\\scripts\\train.py", "--config", "configs/blender_n8_pearson.yaml", "--scene", "drums", "--name", "blender_drums_n8_ssl_mv_dav2s_pearson"], "log": "D:\\SSL\\sparse_gs\\outputs\\logs\\w1_blender_drums_n8_ssl_mv_dav2s_pearson.log"}

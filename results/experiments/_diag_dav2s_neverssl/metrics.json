@@ -1,0 +1,21 @@
+{
+  "experiment": "_diag_dav2s_neverssl",
+  "scene": "fern",
+  "type": "llff",
+  "n_train_views": 3,
+  "ckpt": "last.pt",
+  "num_gaussians": 841286,
+  "num_test_views_used": 3,
+  "num_test_views_total": 3,
+  "wall_clock_eval_sec": 6.226096868515015,
+  "train_view_ids": [
+    1,
+    10,
+    19
+  ],
+  "metrics": {
+    "test/psnr": 15.526988983154297,
+    "test/ssim": 0.39158528049786884,
+    "test/lpips": 0.5615593393643697
+  }
+}

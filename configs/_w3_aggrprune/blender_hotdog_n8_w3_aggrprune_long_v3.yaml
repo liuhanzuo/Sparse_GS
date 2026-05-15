@@ -1,0 +1,59 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v3
+
+# W3-aggrprune-long_v3: 把最后一次 floater prune 提前 2.5k，给恢复期留够 3.5k
+#
+# v2 复盘：
+#   peak val/psnr = 26.635 @ step 14500 (post_floater_offset)
+#   final test    = 23.97 @ step 15000 (last prune at 14000，只剩 1000 步恢复)
+#   末次 floater prune 后 PSNR 仅恢复 1.9 dB 就被 test 截胡。
+#
+# v3 假设：
+#   max_iter 不变 (15000)，把最后一次 floater 从 14000 挪到 11500，
+#   留 3500 步恢复期（之前同长度恢复期可达 +5 dB+）。
+#   预期 final PSNR ≈ 26+，与 peak 接近。
+#
+# Schedule:
+#   floater prune @ 4000 / 6500 / 9000 / 11500   (共 4 次)
+#   thresh_bin linear: 0.05 → 0.01 over [4000, 11500]
+#     step 4000  -> tb = 0.050
+#     step 6500  -> tb ≈ 0.033
+#     step 9000  -> tb ≈ 0.017
+#     step 11500 -> tb = 0.010
+#   unseen prune  @ 2000 / 5000 / 8000 / 11000
+#   refine_stop_iter = 12000  (剩下 3000 步纯精修)
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05            # start of decay
+      thresh_bin_end: 0.01        # end of decay
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000

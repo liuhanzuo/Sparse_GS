@@ -1,0 +1,35 @@
+{"step": 2000, "phase": "pre_unseen_prune", "num_gaussians": 124026, "val/psnr": 24.918323793411254, "val/ssim": 0.9311787700653076, "val/lpips": 0.1281473920494318, "will_prune_n": 204}
+{"step": 2000, "phase": "post_unseen_prune", "num_gaussians": 123822, "val/psnr": 24.918327836990358, "val/ssim": 0.9311798810958862, "val/lpips": 0.12811942115426064, "pruned_n": 204}
+{"step": 2000, "phase": "regular", "num_gaussians": 123238, "val/psnr": 24.925580387115478, "val/ssim": 0.9312576091289521, "val/lpips": 0.12780881714075804}
+{"step": 4000, "phase": "pre_floater_prune", "num_gaussians": 260655, "val/psnr": 25.499911260604858, "val/ssim": 0.9383986461162567, "val/lpips": 0.1090776227042079, "will_prune_n": 56540, "thresh_bin": 0.05}
+{"step": 4000, "phase": "post_floater_prune", "num_gaussians": 204115, "val/psnr": 19.17825837135315, "val/ssim": 0.903127344250679, "val/lpips": 0.15744171053171158, "pruned_n": 56540, "thresh_bin": 0.05}
+{"step": 4000, "phase": "regular", "num_gaussians": 204052, "val/psnr": 19.17695962905884, "val/ssim": 0.9030843156576157, "val/lpips": 0.1574836052209139}
+{"step": 4001, "phase": "post_floater_offset", "num_gaussians": 204052, "val/psnr": 19.229629430770874, "val/ssim": 0.9035847854614257, "val/lpips": 0.15696861810982227, "anchor_step": 4000, "offset": 1}
+{"step": 4200, "phase": "post_floater_offset", "num_gaussians": 215513, "val/psnr": 24.757942295074464, "val/ssim": 0.9325501108169556, "val/lpips": 0.12093945443630219, "anchor_step": 4000, "offset": 200}
+{"step": 4500, "phase": "post_floater_offset", "num_gaussians": 232724, "val/psnr": 25.326119155883788, "val/ssim": 0.9379455149173737, "val/lpips": 0.10836012527346611, "anchor_step": 4000, "offset": 500}
+{"step": 5000, "phase": "pre_unseen_prune", "num_gaussians": 258321, "val/psnr": 25.511138010025025, "val/ssim": 0.9393670856952667, "val/lpips": 0.10393949028104543, "will_prune_n": 903}
+{"step": 5000, "phase": "post_unseen_prune", "num_gaussians": 257418, "val/psnr": 25.51113956451416, "val/ssim": 0.9393670922517776, "val/lpips": 0.10393920477479696, "pruned_n": 903}
+{"step": 6000, "phase": "regular", "num_gaussians": 294842, "val/psnr": 25.781663017272948, "val/ssim": 0.9404398483037949, "val/lpips": 0.1008144859597087}
+{"step": 6500, "phase": "pre_floater_prune", "num_gaussians": 308596, "val/psnr": 25.86512342453003, "val/ssim": 0.9408749502897262, "val/lpips": 0.0996332148462534, "will_prune_n": 28327, "thresh_bin": 0.03666666666666667}
+{"step": 6500, "phase": "post_floater_prune", "num_gaussians": 280269, "val/psnr": 20.906048202514647, "val/ssim": 0.9166602873802185, "val/lpips": 0.13632497310638428, "pruned_n": 28327, "thresh_bin": 0.03666666666666667}
+{"step": 6501, "phase": "post_floater_offset", "num_gaussians": 280206, "val/psnr": 20.973549280166626, "val/ssim": 0.9171938729286194, "val/lpips": 0.13566138535737993, "anchor_step": 6500, "offset": 1}
+{"step": 6700, "phase": "post_floater_offset", "num_gaussians": 286636, "val/psnr": 24.709180183410645, "val/ssim": 0.9339086979627609, "val/lpips": 0.11472771272063255, "anchor_step": 6500, "offset": 200}
+{"step": 7000, "phase": "post_floater_offset", "num_gaussians": 295437, "val/psnr": 25.47969346046448, "val/ssim": 0.9390037852525711, "val/lpips": 0.1032329586520791, "anchor_step": 6500, "offset": 500}
+{"step": 8000, "phase": "pre_unseen_prune", "num_gaussians": 318842, "val/psnr": 25.88324592590332, "val/ssim": 0.9405810242891312, "val/lpips": 0.09862278005108237, "will_prune_n": 1069}
+{"step": 8000, "phase": "post_unseen_prune", "num_gaussians": 317773, "val/psnr": 25.883246297836305, "val/ssim": 0.9405810511112214, "val/lpips": 0.09862274428829551, "pruned_n": 1069}
+{"step": 8000, "phase": "regular", "num_gaussians": 317699, "val/psnr": 25.88860269546509, "val/ssim": 0.9405859744548798, "val/lpips": 0.0986049446463585}
+{"step": 9000, "phase": "pre_floater_prune", "num_gaussians": 331741, "val/psnr": 26.01636357307434, "val/ssim": 0.9408421415090561, "val/lpips": 0.09693333573639393, "will_prune_n": 18255, "thresh_bin": 0.023333333333333338}
+{"step": 9000, "phase": "post_floater_prune", "num_gaussians": 313486, "val/psnr": 22.38183427810669, "val/ssim": 0.9252521204948425, "val/lpips": 0.1206480423361063, "pruned_n": 18255, "thresh_bin": 0.023333333333333338}
+{"step": 9001, "phase": "post_floater_offset", "num_gaussians": 313457, "val/psnr": 22.436068029403685, "val/ssim": 0.9255353569984436, "val/lpips": 0.12026122413575649, "anchor_step": 9000, "offset": 1}
+{"step": 9200, "phase": "post_floater_offset", "num_gaussians": 317732, "val/psnr": 24.907788257598877, "val/ssim": 0.9344638049602508, "val/lpips": 0.1097561601176858, "anchor_step": 9000, "offset": 200}
+{"step": 9500, "phase": "post_floater_offset", "num_gaussians": 322955, "val/psnr": 25.73417631149292, "val/ssim": 0.9389979010820388, "val/lpips": 0.10062216084450483, "anchor_step": 9000, "offset": 500}
+{"step": 10000, "phase": "regular", "num_gaussians": 329021, "val/psnr": 25.961352462768556, "val/ssim": 0.9399855482578278, "val/lpips": 0.09835232557728886}
+{"step": 11000, "phase": "pre_unseen_prune", "num_gaussians": 337958, "val/psnr": 26.1866473197937, "val/ssim": 0.9402151471376419, "val/lpips": 0.09743229461833834, "will_prune_n": 1577}
+{"step": 11000, "phase": "post_unseen_prune", "num_gaussians": 336381, "val/psnr": 26.186652927398683, "val/ssim": 0.9402153396606445, "val/lpips": 0.09743210164830089, "pruned_n": 1577}
+{"step": 11500, "phase": "pre_floater_prune", "num_gaussians": 339607, "val/psnr": 26.368363075256347, "val/ssim": 0.9405947613716126, "val/lpips": 0.09661778409034014, "will_prune_n": 8722, "thresh_bin": 0.010000000000000002}
+{"step": 11500, "phase": "post_floater_prune", "num_gaussians": 330885, "val/psnr": 24.355466928482056, "val/ssim": 0.9334433138370514, "val/lpips": 0.10750684097409248, "pruned_n": 8722, "thresh_bin": 0.010000000000000002}
+{"step": 11501, "phase": "post_floater_offset", "num_gaussians": 330839, "val/psnr": 24.407549180984496, "val/ssim": 0.9336711716651916, "val/lpips": 0.10718859817832709, "anchor_step": 11500, "offset": 1}
+{"step": 11700, "phase": "post_floater_offset", "num_gaussians": 333149, "val/psnr": 26.039786586761476, "val/ssim": 0.9385718297958374, "val/lpips": 0.10100485239177942, "anchor_step": 11500, "offset": 200}
+{"step": 12000, "phase": "regular", "num_gaussians": 335069, "val/psnr": 26.47394310951233, "val/ssim": 0.9404727411270142, "val/lpips": 0.09712805703282357}
+{"step": 14000, "phase": "regular", "num_gaussians": 335069, "val/psnr": 26.888009128570555, "val/ssim": 0.9415280920267105, "val/lpips": 0.09546485804021358}
+{"step": 15000, "phase": "test", "num_gaussians": 335069, "test/psnr": 24.402252659797668, "test/ssim": 0.9304427459836007, "test/lpips": 0.11327772466465831, "wall_clock_sec": 1928.2371656894684}

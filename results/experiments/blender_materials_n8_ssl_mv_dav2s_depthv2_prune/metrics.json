@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_materials_n8_ssl_mv_dav2s_depthv2_prune",
+  "scene": "materials",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 288.18966603279114,
+  "num_gaussians": 493865,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 16.416834163665772,
+    "test/ssim": 0.7901651707291603,
+    "test/lpips": 0.23773030135780573
+  }
+}

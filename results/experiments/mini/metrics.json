@@ -1,0 +1,21 @@
+{
+  "experiment": "mini",
+  "scene": "_mini",
+  "type": "nerf_synthetic",
+  "n_train_views": 4,
+  "ckpt": "last.pt",
+  "num_gaussians": 36476,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "wall_clock_eval_sec": 6.642559051513672,
+  "train_view_ids": [
+    0,
+    2,
+    5,
+    7
+  ],
+  "metrics": {
+    "test/psnr": 27.38512945175171,
+    "test/ssim": 0.8985677361488342
+  }
+}

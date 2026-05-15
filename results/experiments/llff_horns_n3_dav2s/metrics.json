@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_horns_n3_dav2s",
+  "scene": "horns",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 262.780455827713,
+  "num_gaussians": 250000,
+  "num_test_views_used": 8,
+  "num_test_views_total": 8,
+  "train_view_ids": [
+    1,
+    30,
+    61
+  ],
+  "metrics": {
+    "test/psnr": 14.086022973060608,
+    "test/ssim": 0.2984948977828026,
+    "test/lpips": 0.574237234890461
+  }
+}

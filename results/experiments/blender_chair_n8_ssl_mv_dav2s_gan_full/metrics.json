@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_chair_n8_ssl_mv_dav2s_gan_full",
+  "scene": "chair",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 381.8450675010681,
+  "num_gaussians": 485521,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 22.169225215911865,
+    "test/ssim": 0.8773981431126594,
+    "test/lpips": 0.16328841554932297
+  }
+}

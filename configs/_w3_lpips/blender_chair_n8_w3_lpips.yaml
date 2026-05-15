@@ -1,0 +1,24 @@
+_base_: ../_w3_dual_gs/blender_chair_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_chair_n8_w3_lpips
+
+# W3-lpips: 在 W3 dual-GS 基础上加可微 LPIPS-VGG perceptual loss。
+# 动机：纯 L1+SSIM 在稀疏视图下对"半透明 floater"和"边缘鬼影"
+# 几乎不敏感（因为它们的像素差异往往很小但视觉上极其刺眼）；
+# LPIPS-VGG 特征对高频几何错误极其敏感，是 SOTA 方法的常见 regularizer。
+#
+# 实现细节：
+#   - 用 lpips PyPI 包，VGG backbone（与 eval 同一份权重，无额外下载）
+#   - VGG 参数全部冻结，梯度只回传到渲染图
+#   - 每 4 步算一次以控制额外开销（VGG forward 约 30-50ms）
+#   - 1000 步后才开启，避免早期稀疏几何被高频项压死
+#   - patch_size=256：随机 crop 一块算 LPIPS，比全图便宜且仍是有效约束
+ssl:
+  perceptual:
+    enabled: true
+    weight: 0.05
+    net: vgg
+    every: 4
+    start_iter: 1000
+    patch_size: 256

@@ -1,0 +1,18 @@
+_base_: ../sparse_view_lego_n8_dav2s.yaml
+
+experiment:
+  name: lego_n8_ssl_mv_dav2s_depthv2
+
+ssl:
+  depth_consist:
+    enabled: true
+    weight: 0.05
+    start_iter: 500
+    alpha_thresh: 0.5
+    space: disparity
+    depth_eps: 0.001
+    global_weight: 1.0
+    local_weight: 0.5
+    grad_weight: 0.2
+    local_patch_size: 96
+    local_n_patches: 8

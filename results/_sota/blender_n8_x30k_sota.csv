@@ -1,0 +1,17 @@
+scene,tag,label,exists,psnr,ssim,lpips,best_psnr,best_step,best_kind,n_gaussians,wall_clock_sec,run_name
+chair,v6_pgan70,15k,False,,,,,,,,,blender_chair_n8_w3_aggrprune_long_v6_pgan70
+chair,v6_pgan70_x30k,30k,False,,,,,,,,,blender_chair_n8_w3_aggrprune_long_v6_pgan70_x30k
+drums,v6_pgan70,15k,True,15.706936464309692,0.8256272515654564,0.20476371904835106,,,,1127384,5807.370975255966,blender_drums_n8_w3_aggrprune_long_v6_pgan70
+drums,v6_pgan70_x30k,30k,False,,,,,,,,,blender_drums_n8_w3_aggrprune_long_v6_pgan70_x30k
+ficus,v6_pgan70,15k,False,,,,,,,,,blender_ficus_n8_w3_aggrprune_long_v6_pgan70
+ficus,v6_pgan70_x30k,30k,False,,,,,,,,,blender_ficus_n8_w3_aggrprune_long_v6_pgan70_x30k
+hotdog,v6_pgan70,15k,True,24.746663012504577,0.9388132247328759,0.10330304860137403,24.746663012504577,15000,final,347943,1779.391666173935,blender_hotdog_n8_w3_aggrprune_long_v6_pgan70
+hotdog,v6_pgan70_x30k,30k,True,25.758911566734312,0.9377849492430687,0.10260871473699808,25.758911566734312,30000,final,457643,3715.0576663017273,blender_hotdog_n8_w3_aggrprune_long_v6_pgan70_x30k
+lego,v6_pgan70,15k,False,,,,,,,,,blender_lego_n8_w3_aggrprune_long_v6_pgan70
+lego,v6_pgan70_x30k,30k,False,,,,,,,,,blender_lego_n8_w3_aggrprune_long_v6_pgan70_x30k
+materials,v6_pgan70,15k,False,,,,,,,,,blender_materials_n8_w3_aggrprune_long_v6_pgan70
+materials,v6_pgan70_x30k,30k,False,,,,,,,,,blender_materials_n8_w3_aggrprune_long_v6_pgan70_x30k
+mic,v6_pgan70,15k,False,,,,,,,,,blender_mic_n8_w3_aggrprune_long_v6_pgan70
+mic,v6_pgan70_x30k,30k,False,,,,,,,,,blender_mic_n8_w3_aggrprune_long_v6_pgan70_x30k
+ship,v6_pgan70,15k,False,,,,,,,,,blender_ship_n8_w3_aggrprune_long_v6_pgan70
+ship,v6_pgan70_x30k,30k,False,,,,,,,,,blender_ship_n8_w3_aggrprune_long_v6_pgan70_x30k

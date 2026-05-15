@@ -1,0 +1,77 @@
+_base_: ./blender_hotdog_n8_w3_aggrprune_long_v6_pgan70.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v6_pgan70_x30k
+
+# W3-aggrprune-long_v6_pgan70_x30k (hotdog)
+# ============================================================
+# 目的：探索 v6_pgan70 在更长训练下 PSNR 的平台期位置。
+#
+# 训练 schedule：
+#   - 前 0..24000 步：把 v6_pgan70 的 15000 步时间锚点 ×1.6 等比拉伸
+#     （prune / co-prune / co-reg / pseudo / GAN 全部按比例放大）。
+#   - 24000..30000 步：尾段 6000 步纯精修。prune 已停，但
+#     pseudo-view + co-reg + PVD-GAN 仍开（end_sample_pseudo=30000）。
+#
+# LR schedule（β 方案）：
+#   `optim.means_lr_final_factor=0.01` 不变，由 `_MeansLRScheduler`
+#   在 30000 步内衰减到 1%。前段 LR 比 v6_pgan70(15000步) 偏高约 4×
+#   ——结果与原 v6_pgan70 不可严格对比，但适合"找平台期"的探索目的。
+#
+# Snapshot 策略：
+#   - prune 触发时刻：仍按 save_pre_prune_ckpt 存（共 ~8 个）。
+#   - 尾段 24000 起每 1500 步追加一个 periodic snapshot
+#     （24000 / 25500 / 27000 / 28500，共 4 个）。
+#   - 训练结束 + final test 之后，对所有 snapshot 跑 full test，
+#     metrics 写入 eval_log.jsonl + metrics.json:pre_prune_test，
+#     选 PSNR 最大者写到 metrics.json:best_*，然后**删除所有
+#     snapshot 文件**——磁盘最终零残留（trainer.py L1247 unlink）。
+#
+# 预算：训练 ~60 分钟（线性外推） + 12 个 snapshot × ~10s = 2 分钟，
+# 共 ~62 分钟。单 ckpt ~80MB，峰值 12×80=960MB，结束清零。
+# ============================================================
+
+train:
+  iterations: 30000
+  # periodic snapshots：尾段 24000 起每 1500 步保存一次，
+  # 复用 pre-prune snapshot 的 save→end-test→delete 通道。
+  periodic_ckpt_every: 1500
+  periodic_ckpt_start: 24000
+  save_pre_prune_ckpt: true
+
+strategy:
+  refine_start_iter: 800        # 500 ×1.6
+  refine_stop_iter: 19200       # 12000 ×1.6
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 3200          # 2000 ×1.6
+      every_iter: 4800          # 3000 ×1.6
+      stop_iter: 18400          # 11500 ×1.6
+    floater:
+      enabled: true
+      start_iter: 6400          # 4000 ×1.6
+      every_iter: 4000          # 2500 ×1.6
+      stop_iter: 18400          # 11500 ×1.6
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 6400   # 4000 ×1.6
+      thresh_bin_decay_end: 18400    # 11500 ×1.6
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 2400      # 1500 ×1.6
+  coprune_stop_iter: 18400      # 11500 ×1.6
+  coprune_every_iter: 800       # 500 ×1.6
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 30000      # 全程 pseudo + co-reg + GAN
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 3200            # 2000 ×1.6
+    floater_guidance:
+      warmup_iter: 9600         # 6000 ×1.6

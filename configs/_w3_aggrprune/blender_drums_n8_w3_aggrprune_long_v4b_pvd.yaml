@@ -1,0 +1,80 @@
+_base_: ../_w3_dual_gs/blender_drums_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_drums_n8_w3_aggrprune_long_v4b_pvd
+
+# W3-aggrprune-long_v4b_pvd (drums)
+#
+# 在 v4_pvd 的基础上做"方向 B"小改：
+#   end_sample_pseudo: 15000 → 12000
+#
+# 动机（来自 v4_pvd run 的 eval_log 分析）：
+#   - val 曲线峰值出现在 step 14000（val_psnr=16.15），但 final test
+#     仅 15.56，差 0.59 dB；val 14000 与 15000 几乎持平，说明 val 没崩，
+#     是 val→test 的分布 gap 把分数吃掉了 —— drums test=200 张视角
+#     比 val=100 张更"刁钻"，floater/缺失结构在 test 上更暴露。
+#   - 提升 test 泛化的最直接做法：尾段关掉 pseudo-view 和 coreg，让
+#     最后 3000 步是干净的 train-view + photometric/depth 收尾拟合。
+#     trainer.dual_gs 中 end_sample_pseudo 同时控制 pseudo 渲染和
+#     coreg 的结束，所以一行就够。
+#   - PVD 部分原样保留：D 仍每 4 步训一次、guidance 仍在 6000 起为
+#     floater-prune 提供 OR 增强；最后一刀 (@11500) 仍受 PVD 守护。
+#
+# 与 v3 对照（无 PVD、end_sample_pseudo=15000 的版本）也成立 ——
+# 即便不带 PVD，v4b 这个尾段策略本身就是个干净的消融。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 12000   # ← v4b 唯一改动：原 15000 → 12000
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0              # D-only mode；G 不被 adv 拽，只用 D 给 floater-prune 增强
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 2.0e-4
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6
+      warmup_iter: 6000
+      min_fake_logit_gap: 0.5
+      n_pseudo_views: 4

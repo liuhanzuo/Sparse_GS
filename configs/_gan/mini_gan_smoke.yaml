@@ -1,0 +1,35 @@
+_base_: ../sparse_view_mini.yaml
+
+experiment:
+  name: _smoke_patch_gan
+
+train:
+  iterations: 160
+  log_every: 20
+  eval_every: 80
+  save_every: 160
+
+strategy:
+  refine_start_iter: 40
+  refine_stop_iter: 120
+  reset_every: 80
+  refine_every: 40
+
+ssl:
+  patch_gan:
+    enabled: true
+    weight: 0.001
+    start_iter: 20
+    every: 2
+    patch_size: 32
+    base_channels: 16
+    max_channels: 64
+    n_layers: 2
+    spectral_norm: true
+    lr: 0.0002
+    detach_geometry: true
+    augment: true
+    loss: hinge
+
+eval:
+  num_test_renders: 4

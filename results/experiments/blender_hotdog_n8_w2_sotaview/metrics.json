@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_hotdog_n8_w2_sotaview",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 285.6880304813385,
+  "num_gaussians": 324861,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 21.713725419044493,
+    "test/ssim": 0.9047106611728668,
+    "test/lpips": 0.1731759183295071
+  }
+}

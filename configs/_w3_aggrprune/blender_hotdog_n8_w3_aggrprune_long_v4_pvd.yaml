@@ -1,0 +1,82 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v4_pvd
+
+# W3-aggrprune-long_v4_pvd: 在 v3 (long_v3) 基础上增加 Pseudo-View Discriminator
+#
+# 动机：
+#   v2 -> v3 拿到 hotdog peak val_psnr ≈ 26.6（pre last-prune）。
+#   但 floater-prune 仍然依赖纯 depth-quantile 启发式，这会:
+#     - 误杀真实薄结构（边缘 / 高频细节）
+#     - 漏掉真正的 view-inconsistent 鬼影（depth 看起来正常）
+#
+#   PVD 想法：训练一个专门的 discriminator，
+#     real = train-view GT；fake = pseudo-view 渲染（floater 暴露的地方）
+#   D 学到的就是"真实场景纹理 vs. 鬼影/floater"的判别能力。
+#
+#   两个用途：
+#     1) 弱 G 端 adv loss（weight 默认很小或 0，先验证 D 自己能学起来）
+#     2) **核心**：用 D 的空间 fakeness 概率图，给 floater-prune 的候选
+#        集合做 OR 增强（depth 启发式 + D 启发式合并）。
+#
+# 调度：完全继承 v3 (last prune @ 11500，留 3500 步恢复)，
+#        D 从 step 2000 起每 4 步训一次。
+#        Guidance 从 step 6000 起激活（D 已基本学会区分），
+#        且只在 (real_logit - fake_logit) ≥ 0.5 时才信任。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0              # D-only mode first; turn on G later if D is healthy
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 2.0e-4
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6        # only pixels with sigmoid(-logit) > 0.6 count as fake
+      warmup_iter: 6000       # don't trust D before this step
+      min_fake_logit_gap: 0.5 # also require D actually distinguishes real/fake
+      n_pseudo_views: 4       # how many pseudo views to sample per prune call

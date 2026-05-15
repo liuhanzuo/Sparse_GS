@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_leaves_n3_baseline",
+  "scene": "leaves",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 76.94775176048279,
+  "num_gaussians": 150000,
+  "num_test_views_used": 4,
+  "num_test_views_total": 4,
+  "train_view_ids": [
+    1,
+    12,
+    25
+  ],
+  "metrics": {
+    "test/psnr": 12.026688814163208,
+    "test/ssim": 0.21793411299586296,
+    "test/lpips": 0.5425946265459061
+  }
+}

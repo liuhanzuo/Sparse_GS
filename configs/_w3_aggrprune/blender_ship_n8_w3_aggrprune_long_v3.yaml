@@ -1,0 +1,46 @@
+_base_: ../_w3_dual_gs/blender_ship_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_ship_n8_w3_aggrprune_long_v3
+
+# W3-aggrprune-long_v3 (ship)
+#
+# 现状：ship 在 w3_aggrprune 下 final = 16.96（仅比 vanilla 15.74 略好）。
+# ship 场景背景天空 / 海面是大面积低纹理 + 桅杆细线条结构，
+# 极易把"低 alpha 但有效"的薄物 prune 掉。
+# 期望：linear-decay 末端 tb=0.01 显著降低末次伤害，恢复期接管。
+#
+# 与 hotdog v3 共用 schedule。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000

@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_hotdog_n8_ssl_mv_dav2s_depthv2_pearson_idfix",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 312.8409752845764,
+  "num_gaussians": 385778,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 19.425632348060606,
+    "test/ssim": 0.872300092279911,
+    "test/lpips": 0.25863029732368886
+  }
+}

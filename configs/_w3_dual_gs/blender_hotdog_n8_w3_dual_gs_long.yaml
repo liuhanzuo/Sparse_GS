@@ -1,0 +1,48 @@
+_base_: ./blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_dual_gs_long
+
+# W3-dual_gs-long: 对照组——15000 步 + 温和 prune（W3 原版安全阀）
+#
+# 用途：和 aggrprune_long 对比，回答用户假设的关键追问——
+#   "第二次反弹是 prune 机制带来的，还是单纯延长 step 就能涨？"
+#
+# 与 aggrprune_long 的差异（仅两处）：
+#   1) floater.safety_max_ratio: 0.08（原 W3 dual_gs 原值）
+#      vs. aggrprune_long 的 0.25
+#   2) dual_gs.coprune_threshold: 0.10 / safety_max_ratio: 0.10
+#      vs. aggrprune_long 的 0.05 / 0.20
+#
+# 其余 step / refine / prune 时间表完全一致，确保两组只在
+# "剪枝强度"维度上不同，step 数与 densify 周期都一样长。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 14500
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 14000
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 14000
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      safety_max_ratio: 0.08      # 温和（原 W3 dual_gs 值）
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.10         # 温和（原 W3 dual_gs 值）
+  coprune_start_iter: 1500
+  coprune_stop_iter: 14000
+  coprune_every_iter: 500
+  safety_max_ratio: 0.10          # 温和
+  end_sample_pseudo: 15000

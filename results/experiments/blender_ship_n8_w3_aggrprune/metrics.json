@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_ship_n8_w3_aggrprune",
+  "scene": "ship",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 1503.580203294754,
+  "num_gaussians": 605838,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 16.96217938899994,
+    "test/ssim": 0.7217056366801262,
+    "test/lpips": 0.32328737050294876
+  }
+}

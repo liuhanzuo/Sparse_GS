@@ -1,0 +1,84 @@
+experiment:
+  name: llff_orchids_n3_baseline
+  output_dir: outputs
+  seed: 42
+  device: cuda
+data:
+  type: llff
+  root: D:\SSL\sparse_gs\data\nerf_llff_data
+  scene: orchids
+  n_train_views: 3
+  train_view_ids: null
+  image_downsample: 4
+  white_background: false
+  recenter: true
+  rescale: true
+  sparse_mode: uniform
+model:
+  sh_degree: 3
+  init:
+    type: random_in_box
+    num_points: 200000
+    extent: 4.0
+    rgb_init: 0.5
+  scale_init_factor: 0.02
+renderer:
+  near_plane: 0.01
+  far_plane: 1.0e10
+  rasterize_mode: antialiased
+  packed: false
+  absgrad: true
+  render_mode: RGB+ED
+strategy:
+  type: default
+  prune_opa: 0.005
+  grow_grad2d: 0.00025
+  grow_scale3d: 0.01
+  prune_scale3d: 0.1
+  refine_start_iter: 500
+  refine_stop_iter: 6000
+  refine_every: 100
+  reset_every: 3000
+  absgrad: true
+  revised_opacity: false
+  verbose: false
+  cap_max: 180000
+optim:
+  means_lr: 0.00016
+  scales_lr: 0.005
+  quats_lr: 0.001
+  opacities_lr: 0.05
+  sh0_lr: 0.0025
+  shN_lr: 0.000125
+  means_lr_final_factor: 0.01
+  eps: 1.0e-15
+train:
+  iterations: 7000
+  batch_size: 1
+  shuffle: true
+  log_every: 50
+  eval_every: 2000
+  save_every: 7000
+  ssim_lambda: 0.2
+ssl:
+  multiview_photo:
+    enabled: false
+    weight: 0.0
+  depth_consist:
+    enabled: false
+    weight: 0.0
+  pseudo_view:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0
+  ema_teacher:
+    enabled: false
+    momentum: 0.995
+    weight: 0.0
+eval:
+  render_test_at_end: true
+  num_test_renders: null
+  lpips: true
+  lpips_net: vgg

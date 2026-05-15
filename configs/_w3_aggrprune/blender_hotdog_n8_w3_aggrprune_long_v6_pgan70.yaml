@@ -1,0 +1,28 @@
+_base_: ./blender_hotdog_n8_w3_aggrprune_long_v5_widepvd.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v6_pgan70
+
+# W3-aggrprune-long_v6_pgan70 (hotdog)
+# 详见 drums v6 注释：在 v5_widepvd 基础上叠加 70x70 PatchGAN + DiffAug + G adv。
+
+ssl:
+  pvd:
+    arch: pix2pix70
+    weight: 5.0e-3
+    augment_diffaug:
+      enabled: true
+      color: true
+      translation: 0.125
+      cutout: 0.5
+      brightness: 0.5
+      saturation: 2.0
+      contrast: 1.5
+
+# 训练中只在每次 prune 前 save 一份"prune 前"的 GS 权重（不做任何 eval/test）。
+# 训练结束 + final test 之后，依次加载每个 snapshot 跑全量 test（含 LPIPS），
+# 把每个的 PSNR/SSIM/LPIPS 写入 eval_log.jsonl 与 metrics.json:pre_prune_test，
+# 选出 PSNR 最大的那个写到 metrics.json:best_*，然后删除所有 snapshot 文件。
+# hotdog ~33 万高斯，单份 ckpt 约 80MB；约 17 次 prune ⇒ 峰值占用 ~1.4GB，结束清零。
+train:
+  save_pre_prune_ckpt: true

@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_drums_n8_w3_aggrprune",
+  "scene": "drums",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 1205.042580127716,
+  "num_gaussians": 694838,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 15.404342169761657,
+    "test/ssim": 0.814369195997715,
+    "test/lpips": 0.22065817713737487
+  }
+}

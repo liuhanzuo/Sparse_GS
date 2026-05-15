@@ -1,0 +1,163 @@
+experiment:
+  name: blender_drums_n8_w3_aggrprune_long_v4b_pvd
+  output_dir: outputs
+  seed: 42
+  device: cuda
+data:
+  type: nerf_synthetic
+  root: D:\SSL\sparse_gs\data\nerf_synthetic
+  scene: drums
+  n_train_views: 8
+  train_view_ids: null
+  image_downsample: 1
+  white_background: true
+  depth_prior:
+    enabled: true
+    backend: cache
+    tag: depth_anything_v2_small
+    kind: disparity
+    required: false
+  sparse_mode: sota_nerf_synthetic_n8
+model:
+  sh_degree: 3
+  init:
+    type: random_in_box
+    num_points: 100000
+    extent: 1.5
+    rgb_init: 0.5
+  scale_init_factor: 0.01
+renderer:
+  near_plane: 0.01
+  far_plane: 1.0e10
+  rasterize_mode: antialiased
+  packed: false
+  absgrad: true
+  render_mode: RGB+ED
+strategy:
+  type: default
+  prune_opa: 0.005
+  grow_grad2d: 0.0002
+  grow_scale3d: 0.01
+  prune_scale3d: 0.1
+  refine_start_iter: 500
+  refine_stop_iter: 12000
+  refine_every: 100
+  reset_every: 3000
+  absgrad: true
+  revised_opacity: false
+  verbose: false
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 11500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 11500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      safety_max_ratio: 0.25
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 4000
+      thresh_bin_decay_end: 11500
+optim:
+  means_lr: 0.00016
+  scales_lr: 0.005
+  quats_lr: 0.001
+  opacities_lr: 0.05
+  sh0_lr: 0.0025
+  shN_lr: 0.000125
+  means_lr_final_factor: 0.01
+  eps: 1.0e-15
+train:
+  iterations: 15000
+  batch_size: 1
+  shuffle: true
+  log_every: 50
+  eval_every: 2000
+  save_every: 7000
+  ssim_lambda: 0.2
+ssl:
+  multiview_photo:
+    enabled: true
+    weight: 0.1
+    start_iter: 1500
+    n_neighbors: 1
+    alpha_thresh: 0.5
+    ssim_lambda: 0.0
+    depth_eps: 0.001
+    occlusion_check: true
+    occlusion_start_iter: 3000
+    occlusion_tau: 0.1
+    occlusion_alpha_thresh: 0.3
+  depth_consist:
+    enabled: true
+    weight: 0.05
+    start_iter: 500
+    alpha_thresh: 0.5
+    space: disparity
+    depth_eps: 0.001
+    global_weight: 1.0
+    local_weight: 0.5
+    grad_weight: 0.2
+    local_patch_size: 96
+    local_n_patches: 8
+  pseudo_view:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0
+  ema_teacher:
+    enabled: false
+    momentum: 0.995
+    weight: 0.0
+  patch_gan:
+    enabled: false
+    weight: 0.0
+  pvd:
+    enabled: true
+    start_iter: 2000
+    every: 4
+    weight: 0.0
+    patch_size: 128
+    augment: true
+    detach_geometry: true
+    loss: hinge
+    lr: 0.0002
+    beta1: 0.0
+    beta2: 0.99
+    base_channels: 32
+    n_layers: 3
+    spectral_norm: true
+    floater_guidance:
+      enabled: true
+      gate_thresh: 0.6
+      warmup_iter: 6000
+      min_fake_logit_gap: 0.5
+      n_pseudo_views: 4
+eval:
+  render_test_at_end: true
+  num_test_renders: 200
+  lpips: true
+  lpips_net: vgg
+dual_gs:
+  enabled: true
+  seed_gs1: 43
+  coreg: true
+  coreg_weight: 1.0
+  start_sample_pseudo: 500
+  end_sample_pseudo: 12000
+  sample_pseudo_interval: 1
+  pseudo_t_range:
+  - 0.2
+  - 0.8
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 11500
+  coprune_every_iter: 500
+  safety_max_ratio: 0.2

@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_ship_n8_ssl_mv_dav2s_pearson",
+  "scene": "ship",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 377.7284505367279,
+  "num_gaussians": 1759065,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 9.718093132972717,
+    "test/ssim": 0.5594599707424641,
+    "test/lpips": 0.45695534475147725
+  }
+}

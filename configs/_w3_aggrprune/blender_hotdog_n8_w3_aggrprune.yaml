@@ -1,0 +1,18 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune
+
+# W3-aggrprune: 仅针对 floater 病灶场景（drums / materials / hotdog / ship）
+# 调强两条剪枝通道，其余沿用原 W3 dual-GS。
+#  1) SparseGS-style floater-prune 的安全阀：0.08 -> 0.25
+#  2) CoR-GS 风格 co-prune disagreement 阈值：0.10 -> 0.05
+#  3) co-prune 安全阀：0.10 -> 0.20
+strategy:
+  prune:
+    floater:
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune_threshold: 0.05
+  safety_max_ratio: 0.20

@@ -1,0 +1,17 @@
+_base_: ../_w3_dual_gs/blender_chair_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_chair_n8_w3_nofloater
+
+# W3-nofloater: 仅关闭 SparseGS-style floater-prune，保留 W2 unseen-prune
+# 与 dual-GS 的 co-prune + co-reg。诊断观察：
+#   - hotdog 在 step=4000 floater-prune 砍掉 21% 后 val PSNR 25.0 -> 19.3
+#   - drums / materials 同样在拟合较好时被误杀
+# 假设：floater 判据无法区分"真 floater"和"高频细节几何"，
+#       关掉它能让 hotdog 等已经表现良好的场景不再被反伤；
+#       drums / materials 等本就 floater 严重的场景大概率小幅下降，
+#       但整体平均（8 场景）期望提升。
+strategy:
+  prune:
+    floater:
+      enabled: false

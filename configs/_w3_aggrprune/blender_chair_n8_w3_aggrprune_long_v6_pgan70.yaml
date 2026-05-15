@@ -1,0 +1,24 @@
+_base_: ./blender_chair_n8_w3_aggrprune_long_v5_widepvd.yaml
+
+experiment:
+  name: blender_chair_n8_w3_aggrprune_long_v6_pgan70
+
+# W3-aggrprune-long_v6_pgan70 (chair)
+# 与 drums/hotdog v6_pgan70 完全相同的 PatchGAN70 + DiffAug 配置。
+# 详见 drums v6_pgan70 注释。
+
+ssl:
+  pvd:
+    arch: pix2pix70
+    weight: 5.0e-3
+    augment_diffaug:
+      enabled: true
+      color: true
+      translation: 0.125
+      cutout: 0.5
+      brightness: 0.5
+      saturation: 2.0
+      contrast: 1.5
+
+train:
+  save_pre_prune_ckpt: true

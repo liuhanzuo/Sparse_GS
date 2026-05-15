@@ -1,0 +1,32 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6_ssl_mv
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# v5: cross-view photometric consistency only (no teacher).
+# This is the "real" SSL signal — it does NOT distill from the model itself,
+# it couples training views through the student's own depth, so geometry
+# inconsistencies across views are penalized directly.
+ssl:
+  multiview_photo:
+    enabled: true
+    weight: 0.10
+    start_iter: 1500          # let the geometry settle a bit first
+    n_neighbors: 1            # 1 reproj per step is cheap; bump to 2 for stronger signal
+    alpha_thresh: 0.5
+    ssim_lambda: 0.0
+    depth_eps: 0.001
+
+  # all other SSL losses off in this experiment
+  ema_teacher:     {enabled: false, weight: 0.0}
+  pseudo_view:     {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}

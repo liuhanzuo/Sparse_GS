@@ -1,0 +1,72 @@
+_base_: base.yaml
+data:
+  depth_prior:
+    backend: cache
+    enabled: true
+    kind: disparity
+    required: false
+    tag: depth_anything_v2_small_hf
+  image_downsample: 4
+  n_train_views: 3
+  recenter: true
+  rescale: true
+  root: data/nerf_llff_data
+  scene: fern
+  sparse_mode: uniform
+  train_view_ids: null
+  type: llff
+  white_background: false
+eval:
+  lpips: true
+  lpips_net: vgg
+  num_test_renders: null
+  render_test_at_end: true
+experiment:
+  name: _diag_dav2s_neverssl
+model:
+  init:
+    extent: 4.0
+    num_points: 200000
+    rgb_init: 0.5
+    type: random_in_box
+  scale_init_factor: 0.02
+  sh_degree: 3
+renderer:
+  absgrad: true
+  far_plane: 1.0e10
+  near_plane: 0.01
+  packed: false
+  rasterize_mode: antialiased
+  render_mode: RGB+ED
+ssl:
+  depth_consist:
+    alpha_thresh: 0.0
+    depth_eps: 0.001
+    enabled: true
+    space: disparity
+    start_iter: 999999
+    weight: 0.05
+  ema_teacher:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0
+  multiview_photo:
+    alpha_thresh: 0.0
+    depth_eps: 0.001
+    enabled: true
+    n_neighbors: 1
+    occlusion_alpha_thresh: 0.0
+    occlusion_check: true
+    occlusion_start_iter: 3000
+    occlusion_tau: 0.1
+    ssim_lambda: 0.0
+    start_iter: 999999
+    weight: 0.1
+  pseudo_view:
+    enabled: false
+    weight: 0.0
+train:
+  iterations: 7000
+  ssim_lambda: 0.2

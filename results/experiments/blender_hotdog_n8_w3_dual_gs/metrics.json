@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_hotdog_n8_w3_dual_gs",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 673.1072881221771,
+  "num_gaussians": 281595,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 23.613017506599427,
+    "test/ssim": 0.9300976496934891,
+    "test/lpips": 0.11929187215864659
+  }
+}

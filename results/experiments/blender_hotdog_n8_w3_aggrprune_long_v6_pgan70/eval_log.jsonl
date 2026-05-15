@@ -1,0 +1,24 @@
+{"step": 2000, "phase": "pre_unseen_prune", "num_gaussians": 130308, "will_prune_n": 180}
+{"step": 2000, "phase": "regular", "num_gaussians": 129575, "val/psnr": 24.148587584495544, "val/ssim": 0.928257092833519}
+{"step": 4000, "phase": "pre_floater_prune", "num_gaussians": 276038, "will_prune_n": 59190, "thresh_bin": 0.05}
+{"step": 4000, "phase": "regular", "num_gaussians": 216775, "val/psnr": 18.359103560447693, "val/ssim": 0.8997013568878174}
+{"step": 5000, "phase": "pre_unseen_prune", "num_gaussians": 274403, "will_prune_n": 1009}
+{"step": 6000, "phase": "regular", "num_gaussians": 310434, "val/psnr": 25.156179189682007, "val/ssim": 0.9404871463775635}
+{"step": 6500, "phase": "pre_floater_prune", "num_gaussians": 323192, "will_prune_n": 28885, "thresh_bin": 0.03666666666666667}
+{"step": 8000, "phase": "pre_unseen_prune", "num_gaussians": 331971, "will_prune_n": 1196}
+{"step": 8000, "phase": "regular", "num_gaussians": 330703, "val/psnr": 25.310914754867554, "val/ssim": 0.9406199157238007}
+{"step": 9000, "phase": "pre_floater_prune", "num_gaussians": 343717, "will_prune_n": 17915, "thresh_bin": 0.023333333333333338}
+{"step": 10000, "phase": "regular", "num_gaussians": 342113, "val/psnr": 25.463024854660034, "val/ssim": 0.9412911459803581}
+{"step": 11000, "phase": "pre_unseen_prune", "num_gaussians": 350373, "will_prune_n": 1719}
+{"step": 11500, "phase": "pre_floater_prune", "num_gaussians": 351963, "will_prune_n": 8544, "thresh_bin": 0.010000000000000002}
+{"step": 12000, "phase": "regular", "num_gaussians": 347943, "val/psnr": 25.776370525360107, "val/ssim": 0.9420755952596664}
+{"step": 14000, "phase": "regular", "num_gaussians": 347943, "val/psnr": 25.975510239601135, "val/ssim": 0.9432096257805824}
+{"step": 15000, "phase": "test", "num_gaussians": 347943, "test/psnr": 24.746663012504577, "test/ssim": 0.9388132247328759, "test/lpips": 0.10330304860137403, "wall_clock_sec": 1779.391666173935}
+{"step": 2000, "phase": "pre_prune_ckpt_test", "num_gaussians": 130308, "test/psnr": 22.823412256240843, "test/ssim": 0.9245626074075699, "test/lpips": 0.13878703508526086, "kind": "unseen", "n_pruned": 180, "n_gaussians": 130308, "thresh_bin": null, "elapsed_sec": 9.862224102020264}
+{"step": 4000, "phase": "pre_prune_ckpt_test", "num_gaussians": 276038, "test/psnr": 23.384253726005554, "test/ssim": 0.9336254081130028, "test/lpips": 0.11945647740736604, "kind": "floater", "n_pruned": 59190, "n_gaussians": 276038, "thresh_bin": 0.05, "elapsed_sec": 9.941256999969482}
+{"step": 5000, "phase": "pre_prune_ckpt_test", "num_gaussians": 274403, "test/psnr": 23.692844185829163, "test/ssim": 0.9353951212763786, "test/lpips": 0.11145535804331302, "kind": "unseen", "n_pruned": 1009, "n_gaussians": 274403, "thresh_bin": null, "elapsed_sec": 10.059770345687866}
+{"step": 6500, "phase": "pre_prune_ckpt_test", "num_gaussians": 323192, "test/psnr": 23.994135999679564, "test/ssim": 0.937074553668499, "test/lpips": 0.10797630744054913, "kind": "floater", "n_pruned": 28885, "n_gaussians": 323192, "thresh_bin": 0.03666666666666667, "elapsed_sec": 10.169837951660156}
+{"step": 8000, "phase": "pre_prune_ckpt_test", "num_gaussians": 331971, "test/psnr": 24.095577149391175, "test/ssim": 0.937095008790493, "test/lpips": 0.10805195508524776, "kind": "unseen", "n_pruned": 1196, "n_gaussians": 331971, "thresh_bin": null, "elapsed_sec": 10.301042795181274}
+{"step": 9000, "phase": "pre_prune_ckpt_test", "num_gaussians": 343717, "test/psnr": 24.245708985328676, "test/ssim": 0.9377576634287834, "test/lpips": 0.10568799819797277, "kind": "floater", "n_pruned": 17915, "n_gaussians": 343717, "thresh_bin": 0.023333333333333338, "elapsed_sec": 10.47070860862732}
+{"step": 11000, "phase": "pre_prune_ckpt_test", "num_gaussians": 350373, "test/psnr": 24.349583864212036, "test/ssim": 0.9377187117934227, "test/lpips": 0.1053063065558672, "kind": "unseen", "n_pruned": 1719, "n_gaussians": 350373, "thresh_bin": null, "elapsed_sec": 10.59630799293518}
+{"step": 11500, "phase": "pre_prune_ckpt_test", "num_gaussians": 351963, "test/psnr": 24.367405920028688, "test/ssim": 0.9370675158500671, "test/lpips": 0.10618128454312682, "kind": "floater", "n_pruned": 8544, "n_gaussians": 351963, "thresh_bin": 0.010000000000000002, "elapsed_sec": 10.427709102630615}

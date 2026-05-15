@@ -1,0 +1,43 @@
+_base_: base.yaml
+
+experiment:
+  name: lego_n6_ssl
+
+data:
+  scene: lego
+  n_train_views: 6
+
+train:
+  iterations: 7000
+  ssim_lambda: 0.2
+
+# Phase-D: enable EMA teacher + pseudo-view distillation + same-view consistency.
+ssl:
+  ema_teacher:
+    enabled: true
+    weight: 0.05            # mild same-view teacher-student regularizer
+    momentum: 1.0           # 1.0 = pure frozen snapshot (no intra-window EMA)
+    snapshot_every: 1500    # refresh teacher every N steps
+    build_iter: 2000        # don't build teacher until photo loss has done its job
+    start_iter: 2500        # don't *use* the teacher loss until shortly after build
+    ssim_lambda: 0.1
+    depth_weight: 0.0
+
+  pseudo_view:
+    enabled: true
+    weight: 0.10
+    start_iter: 2500
+    ssim_lambda: 0.2
+    t_range: [0.25, 0.75]
+    alpha_thresh: 0.5
+    detach_geometry: true   # SSL only updates colors/opacities (safe default)
+
+  multiview_photo:
+    enabled: false
+    weight: 0.0
+  depth_consist:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0

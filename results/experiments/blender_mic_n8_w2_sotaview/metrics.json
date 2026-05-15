@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_mic_n8_w2_sotaview",
+  "scene": "mic",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 292.2140944004059,
+  "num_gaussians": 406596,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 22.294697465896608,
+    "test/ssim": 0.9269780439138412,
+    "test/lpips": 0.09276891193352639
+  }
+}

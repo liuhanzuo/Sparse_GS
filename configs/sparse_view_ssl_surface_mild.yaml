@@ -1,0 +1,24 @@
+_base_: sparse_view_ssl_surface.yaml
+
+experiment:
+  name: lego_n6_ssl_surface_mild
+
+# Milder surface bias. Same idea as ssl_surface but every weight halved
+# and the start_iter pushed later, so the prior only "polishes" the
+# already-converged geometry rather than reshaping it.
+ssl:
+  surface_flatten:
+    enabled: true
+    weight: 0.005      # was 0.01
+    start_iter: 3500   # was 2000
+    mode: ratio
+    opacity_thresh: 0.05
+
+  normal_smooth:
+    enabled: true
+    weight: 0.005      # was 0.02 — big cut
+    start_iter: 4000   # was 2500
+    alpha_thresh: 0.5
+    depth_eps: 0.001
+    edge_aware: true
+    edge_lambda: 10.0

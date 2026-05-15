@@ -1,0 +1,14 @@
+_base_: ../_w2_prune/blender_ficus_n8_dav2s_depthv2_prune.yaml
+
+experiment:
+  name: blender_ficus_n8_w2_sotaview
+
+# B-stage fix: switch the train-view sampler from naive linspace
+# (-> [0,14,28,42,57,71,85,99]) to the fixed 8-view list shared by
+# DNGaussian (third_party/DNGaussian/scene/dataset_readers.py:331) and
+# CoR-GS (third_party/CoR-GS/scene/dataset_readers.py:511):
+#   [2, 16, 26, 55, 73, 76, 86, 93]
+# Same setting both papers use for their NeRF-Synthetic n=8 numbers, so
+# this lets us compare apples-to-apples against their reported results.
+data:
+  sparse_mode: sota_nerf_synthetic_n8

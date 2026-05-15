@@ -1,0 +1,20 @@
+{
+  "experiment": "llff_flower_n3_dav2s",
+  "scene": "flower",
+  "n_train_views": 3,
+  "iterations": 7000,
+  "wall_clock_sec": 234.99925684928894,
+  "num_gaussians": 250000,
+  "num_test_views_used": 5,
+  "num_test_views_total": 5,
+  "train_view_ids": [
+    1,
+    17,
+    33
+  ],
+  "metrics": {
+    "test/psnr": 16.641805267333986,
+    "test/ssim": 0.40694189369678496,
+    "test/lpips": 0.469374018907547
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "experiment": "blender_materials_n8_w2_sotaview",
+  "scene": "materials",
+  "n_train_views": 8,
+  "iterations": 7000,
+  "wall_clock_sec": 304.1486792564392,
+  "num_gaussians": 418848,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 13.07904270172119,
+    "test/ssim": 0.7124031254649162,
+    "test/lpips": 0.30693968176841735
+  }
+}

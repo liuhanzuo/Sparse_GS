@@ -1,0 +1,21 @@
+{
+  "experiment": "llff_fern_n3_baseline",
+  "scene": "fern",
+  "type": "llff",
+  "n_train_views": 3,
+  "ckpt": "last.pt",
+  "num_gaussians": 244595,
+  "num_test_views_used": 3,
+  "num_test_views_total": 3,
+  "wall_clock_eval_sec": 5.945382595062256,
+  "train_view_ids": [
+    1,
+    10,
+    19
+  ],
+  "metrics": {
+    "test/psnr": 16.07393232981364,
+    "test/ssim": 0.3997085690498352,
+    "test/lpips": 0.6109058459599813
+  }
+}

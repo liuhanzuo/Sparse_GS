@@ -1,0 +1,52 @@
+_base_: ../_w3_dual_gs/blender_hotdog_n8_w3_dual_gs.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long
+
+# W3-aggrprune-long: 验证"延长训练能否让 prune 出现第二次反弹"
+#
+# 假设来源（用户）：观察到 hotdog 在 7000 步内 val_psnr 走的是
+#   step 2000 = 25.02 (peak)
+#   step 4000 = 19.34 (prune 后崩)
+#   step 6000 = 20.13 (恢复中)
+#   step 7000 = 23.50 (final)
+# 也许这是 25 -> 19 -> 20 -> 24 -> 26... 的递进反弹模式被早停截断。
+#
+# 本配置把训练拉到 15000 步（2.14x），让 floater-prune 触发 5 次而不是 2 次：
+#   floater-prune events @ 4000 / 6500 / 9000 / 11500 / 14000
+#   unseen-prune events  @ 2000 / 5000 / 8000 / 11000 / 14000
+# 配合保留 W3-aggrprune 的安全阀放宽（0.25 / 0.05 / 0.20）。
+#
+# 评估事件：base.yaml 的 train.eval_every=2000 不变，所以会有
+#   eval @ 2000 / 4000 / 6000 / 8000 / 10000 / 12000 / 14000
+# 共 7 个采样点，足够刻画反弹曲线。
+
+train:
+  iterations: 15000
+
+strategy:
+  refine_start_iter: 500
+  refine_stop_iter: 14500       # 给到接近末端，保留 densify 能力做"恢复"
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 3000
+      stop_iter: 14000
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2500
+      stop_iter: 14000
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      safety_max_ratio: 0.25    # 保留 W3-aggrprune 放宽
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 1500
+  coprune_stop_iter: 14000
+  coprune_every_iter: 500
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 15000      # co-reg 一直伴随到训练末尾

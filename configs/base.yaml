@@ -1,0 +1,107 @@
+# Shared defaults. sparse_view.yaml inherits from this via _base_.
+
+experiment:
+  name: baseline
+  output_dir: outputs
+  seed: 42
+  device: cuda
+
+data:
+  type: nerf_synthetic            # only loader implemented for now
+  root: data/nerf_synthetic
+  scene: lego
+  # Sparse-view selection. If train_view_ids is null, n_train_views are
+  # picked deterministically from the full train split using seed.
+  n_train_views: 6
+  train_view_ids: null
+  # Eval / test always uses the full split.
+  image_downsample: 1             # 1 = full res (800x800 for nerf-synthetic)
+  white_background: true
+
+model:
+  sh_degree: 3
+  init:
+    type: random_in_box           # NeRF-Synthetic has no SfM cloud
+    num_points: 100000
+    extent: 1.5                   # half-side of the init bbox in world units
+    rgb_init: 0.5                 # gray
+  scale_init_factor: 0.01         # initial isotropic scale (world units)
+
+renderer:
+  near_plane: 0.01
+  far_plane: 1.0e10
+  rasterize_mode: antialiased     # 'classic' | 'antialiased'
+  packed: false                   # gsplat 1.5.3 has a packed+RGB+ED+backgrounds shape bug
+  absgrad: true                   # required if strategy.absgrad=true
+  render_mode: RGB+ED             # also returns expected depth in 4th channel
+
+strategy:
+  type: default                   # gsplat.DefaultStrategy
+  prune_opa: 0.005
+  grow_grad2d: 0.0002
+  grow_scale3d: 0.01
+  prune_scale3d: 0.1
+  refine_start_iter: 500
+  refine_stop_iter: 15000
+  refine_every: 100
+  reset_every: 3000
+  absgrad: true
+  revised_opacity: false
+  verbose: false
+
+optim:
+  # Per-parameter LRs match gsplat's official simple_trainer defaults.
+  means_lr: 1.6e-4                # scaled by scene_scale at runtime
+  scales_lr: 5.0e-3
+  quats_lr: 1.0e-3
+  opacities_lr: 5.0e-2
+  sh0_lr: 2.5e-3
+  shN_lr: 1.25e-4
+  # Schedulers are disabled by default — gsplat's exp decay on means.
+  means_lr_final_factor: 0.01     # means LR decays exponentially to lr*factor
+  eps: 1.0e-15
+
+train:
+  iterations: 7000
+  batch_size: 1                   # one camera per step (standard for 3DGS)
+  shuffle: true
+  log_every: 50
+  eval_every: 2000
+  save_every: 7000
+  # —— pre-prune mid-test：每次 prune 之前对当前模型在 test split 上跑一次评估，
+  # 结果写入 eval_log.jsonl 的 mid_test_pre_{floater,unseen} 行（不保留任何 ckpt）。
+  # 用于训练后挑 val/test 峰值的"最佳时刻"做 final 数。默认关闭。
+  test_pre_prune: false
+  test_pre_prune_min_step: 8000   # 早于此 step 的 prune 不跑（前期没参考价值）
+  test_pre_prune_views: null      # null = 用全量 test；调小可省时间但不再可比
+  test_pre_prune_lpips: true      # 是否算 LPIPS
+  ssim_lambda: 0.2                # loss = (1-l)*L1 + l*(1-SSIM)
+
+# Stage-C: SSL hook registry. All disabled in the baseline.
+ssl:
+  multiview_photo:
+    enabled: false
+    weight: 0.0
+  depth_consist:
+    enabled: false
+    weight: 0.0
+  pseudo_view:
+    enabled: false
+    weight: 0.0
+  feature:
+    enabled: false
+    weight: 0.0
+  ema_teacher:
+    enabled: false
+    momentum: 0.995
+  patch_gan:
+    enabled: false
+    weight: 0.0
+
+eval:
+  render_test_at_end: true
+  num_test_renders: 8             # cap to keep eval fast; null = all
+  num_val_renders: 8              # 训练中 val eval 用的张数（不影响 final test）
+  lpips: true                     # compute LPIPS in evaluate(); silently skipped if package missing
+  lpips_in_train: false           # 训练期间 val eval 是否算 LPIPS（默认否，省时间）
+  lpips_net: vgg                  # 'vgg' | 'alex' | 'squeeze'

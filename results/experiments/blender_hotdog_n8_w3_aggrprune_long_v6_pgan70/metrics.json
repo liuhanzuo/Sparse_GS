@@ -1,0 +1,147 @@
+{
+  "experiment": "blender_hotdog_n8_w3_aggrprune_long_v6_pgan70",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 15000,
+  "wall_clock_sec": 1779.391666173935,
+  "num_gaussians": 347943,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 24.746663012504577,
+    "test/ssim": 0.9388132247328759,
+    "test/lpips": 0.10330304860137403
+  },
+  "pre_prune_test": {
+    "best": {
+      "label": "final",
+      "step": 15000,
+      "kind": "final",
+      "n_gaussians": 347943,
+      "metrics": {
+        "test/psnr": 24.746663012504577,
+        "test/ssim": 0.9388132247328759,
+        "test/lpips": 0.10330304860137403
+      }
+    },
+    "all": [
+      {
+        "label": "final",
+        "step": 15000,
+        "kind": "final",
+        "n_gaussians": 347943,
+        "metrics": {
+          "test/psnr": 24.746663012504577,
+          "test/ssim": 0.9388132247328759,
+          "test/lpips": 0.10330304860137403
+        }
+      },
+      {
+        "label": "pre_unseen@2000",
+        "step": 2000,
+        "kind": "unseen",
+        "n_gaussians": 130308,
+        "metrics": {
+          "test/psnr": 22.823412256240843,
+          "test/ssim": 0.9245626074075699,
+          "test/lpips": 0.13878703508526086
+        }
+      },
+      {
+        "label": "pre_floater@4000",
+        "step": 4000,
+        "kind": "floater",
+        "n_gaussians": 276038,
+        "metrics": {
+          "test/psnr": 23.384253726005554,
+          "test/ssim": 0.9336254081130028,
+          "test/lpips": 0.11945647740736604
+        }
+      },
+      {
+        "label": "pre_unseen@5000",
+        "step": 5000,
+        "kind": "unseen",
+        "n_gaussians": 274403,
+        "metrics": {
+          "test/psnr": 23.692844185829163,
+          "test/ssim": 0.9353951212763786,
+          "test/lpips": 0.11145535804331302
+        }
+      },
+      {
+        "label": "pre_floater@6500",
+        "step": 6500,
+        "kind": "floater",
+        "n_gaussians": 323192,
+        "metrics": {
+          "test/psnr": 23.994135999679564,
+          "test/ssim": 0.937074553668499,
+          "test/lpips": 0.10797630744054913
+        }
+      },
+      {
+        "label": "pre_unseen@8000",
+        "step": 8000,
+        "kind": "unseen",
+        "n_gaussians": 331971,
+        "metrics": {
+          "test/psnr": 24.095577149391175,
+          "test/ssim": 0.937095008790493,
+          "test/lpips": 0.10805195508524776
+        }
+      },
+      {
+        "label": "pre_floater@9000",
+        "step": 9000,
+        "kind": "floater",
+        "n_gaussians": 343717,
+        "metrics": {
+          "test/psnr": 24.245708985328676,
+          "test/ssim": 0.9377576634287834,
+          "test/lpips": 0.10568799819797277
+        }
+      },
+      {
+        "label": "pre_unseen@11000",
+        "step": 11000,
+        "kind": "unseen",
+        "n_gaussians": 350373,
+        "metrics": {
+          "test/psnr": 24.349583864212036,
+          "test/ssim": 0.9377187117934227,
+          "test/lpips": 0.1053063065558672
+        }
+      },
+      {
+        "label": "pre_floater@11500",
+        "step": 11500,
+        "kind": "floater",
+        "n_gaussians": 351963,
+        "metrics": {
+          "test/psnr": 24.367405920028688,
+          "test/ssim": 0.9370675158500671,
+          "test/lpips": 0.10618128454312682
+        }
+      }
+    ]
+  },
+  "best_label": "final",
+  "best_step": 15000,
+  "best_n_gaussians": 347943,
+  "best_metrics": {
+    "test/psnr": 24.746663012504577,
+    "test/ssim": 0.9388132247328759,
+    "test/lpips": 0.10330304860137403
+  }
+}

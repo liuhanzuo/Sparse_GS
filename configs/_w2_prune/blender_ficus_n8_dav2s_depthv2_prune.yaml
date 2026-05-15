@@ -1,0 +1,22 @@
+_base_: ../_depth_v2/blender_ficus_n8_dav2s_depthv2.yaml
+
+experiment:
+  name: blender_ficus_n8_ssl_mv_dav2s_depthv2_prune
+
+# W2: DNGaussian-style unseen prune + lightweight SparseGS-style floater prune.
+# See blender_chair_n8_dav2s_depthv2_prune.yaml for full rationale.
+strategy:
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 2000
+      every_iter: 2000
+      stop_iter: 6500
+    floater:
+      enabled: true
+      start_iter: 4000
+      every_iter: 2000
+      stop_iter: 6500
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      safety_max_ratio: 0.08
