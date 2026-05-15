@@ -10,7 +10,7 @@ experiment:
 
 data:
   type: nerf_synthetic
-  root: D:\SSL\sparse_gs\data\nerf_synthetic
+  root: data/nerf_synthetic
   scene: lego
   n_train_views: 8
   train_view_ids: null
