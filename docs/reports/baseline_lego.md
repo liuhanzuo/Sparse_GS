@@ -23,8 +23,8 @@ Hardware: RTX 5090, CUDA 13.1, gsplat 1.5.3 (JIT), 7000 iters per run.
 ## How to reproduce
 
 ```powershell
-python d:\SSL\sparse_gs\scripts\train.py --config d:\SSL\sparse_gs\configs\sparse_view.yaml --n-views 3
-python d:\SSL\sparse_gs\scripts\train.py --config d:\SSL\sparse_gs\configs\sparse_view.yaml --n-views 6
-python d:\SSL\sparse_gs\scripts\train.py --config d:\SSL\sparse_gs\configs\sparse_view.yaml --n-views 9
-python d:\SSL\sparse_gs\scripts\train.py --config d:\SSL\sparse_gs\configs\sparse_view.yaml --n-views 12
+python scripts/train.py --config configs/sparse_view.yaml --n-views 3
+python scripts/train.py --config configs/sparse_view.yaml --n-views 6
+python scripts/train.py --config configs/sparse_view.yaml --n-views 9
+python scripts/train.py --config configs/sparse_view.yaml --n-views 12
 ```
