@@ -28,7 +28,9 @@ data/**/.cache/
 # ---- Pretrained / downloaded model weights ----
 # Local snapshot of Depth-Anything-V2 from HuggingFace
 # (snapshot_download with local_dir=...; ~99MB Small, ~390MB Base, ~1.3GB Large)
-models/
+# NOTE: must be root-anchored ("/models/") so we don't accidentally ignore the
+# Python package sparse_gs/models/ which contains real source code.
+/models/
 
 # ---- Experiment outputs (live training artefacts) ----
 outputs/
