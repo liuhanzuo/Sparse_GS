@@ -14,7 +14,11 @@ os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
 from huggingface_hub import snapshot_download   # noqa: E402
 
 REPO = "depth-anything/Depth-Anything-V2-Base-hf"
-LOCAL = Path(r"d:\SSL\sparse_gs\models\depth_anything_v2_base")
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+LOCAL = Path(os.environ.get(
+    "SPARSE_GS_DAV2_BASE_DIR",
+    str(_REPO_ROOT / "models" / "depth_anything_v2_base"),
+))
 LOG = LOCAL.parent / "_download_base.log"
 LOCAL.mkdir(parents=True, exist_ok=True)
 

@@ -1,0 +1,17 @@
+# Sparse-GS — optional dev / analysis dependencies.
+#
+# These are NOT required to launch training, but you'll want them if you:
+#   * run scripts/download_llff.py to fetch the LLFF dataset
+#   * generate diagnostic plots / coverage maps
+#   * compute SSIM via scikit-image (we already use lpips + a torch SSIM,
+#     but a couple of legacy diagnostic scripts still call skimage)
+#
+# Install with:   pip install -r requirements-dev.txt
+
+# --- Dataset fetchers --------------------------------------------------------
+gdown>=4.7              # Google-Drive downloads (LLFF mirror)
+requests>=2.30          # generic HTTP fetcher (DAv2 weights, etc.)
+
+# --- Diagnostics & plotting --------------------------------------------------
+matplotlib>=3.7
+scikit-image>=0.21      # legacy SSIM in scripts/b_diagnose.py

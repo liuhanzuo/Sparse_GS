@@ -1,11 +1,16 @@
 """Merge diagnostic triptychs from drums/materials/chair into a single
 labeled image so we can verify with one image read.
 """
+import os
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-DIAG = Path(r"D:\SSL\sparse_gs\outputs\_diag_w3_failed")
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+DIAG = Path(os.environ.get(
+    "SPARSE_GS_DIAG_DIR",
+    str(_REPO_ROOT / "outputs" / "_diag_w3_failed"),
+))
 SCENES = ["drums", "materials", "chair"]
 VIEW = 50  # 取 v=50 一张代表
 TILE_W = 480  # 每个 cell 的宽（pred|GT|diff 已经是 3 列）

@@ -1,4 +1,6 @@
 """Probe how to load DAv2-Small under transformers 5.2.0."""
+import os
+from pathlib import Path
 import torch
 from PIL import Image
 import numpy as np
@@ -6,7 +8,11 @@ import numpy as np
 # attempt 1: AutoModelForDepthEstimation
 from transformers import AutoImageProcessor, AutoModelForDepthEstimation
 
-MODEL = r"D:\SSL\sparse_gs\outputs\_models\Depth-Anything-V2-Small-hf"
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+MODEL = os.environ.get(
+    "SPARSE_GS_DAV2_SMALL_DIR",
+    str(_REPO_ROOT / "models" / "Depth-Anything-V2-Small-hf"),
+)
 
 try:
     proc = AutoImageProcessor.from_pretrained(MODEL)

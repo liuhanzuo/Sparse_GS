@@ -1,10 +1,15 @@
 """Download DAv2-Small to a real local dir (Windows hub cache uses
 symlinks that may end up empty)."""
+import os
 from huggingface_hub import snapshot_download
 from pathlib import Path
 import time
 
-target = Path(r"D:\SSL\sparse_gs\outputs\_models\Depth-Anything-V2-Small-hf")
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+target = Path(os.environ.get(
+    "SPARSE_GS_DAV2_SMALL_DIR",
+    str(_REPO_ROOT / "models" / "Depth-Anything-V2-Small-hf"),
+))
 target.mkdir(parents=True, exist_ok=True)
 
 t0 = time.time()

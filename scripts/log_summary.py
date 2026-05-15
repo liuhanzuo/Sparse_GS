@@ -4,7 +4,7 @@ Reads the ``eval_log.jsonl`` files produced by ``Trainer._log_eval`` and
 emits a table with one row per eval, plus a summary line:
 
     === blender_hotdog_n8_w3_aggrprune_long_v2 ===
-    log: D:\\SSL\\sparse_gs\\outputs\\.../eval_log.jsonl  (43 entries)
+    log: outputs/.../eval_log.jsonl  (43 entries)
        step | phase                 |   psnr |   ssim | lpips |       N | extra
        2000 | regular               | 25.020 | 0.9322 | 0.126 |  244000 |
        4000 | pre_floater_prune     | 26.103 | 0.9402 | 0.118 |  282369 | will=49546 tb=0.050

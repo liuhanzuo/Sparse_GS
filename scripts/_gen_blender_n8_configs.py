@@ -16,7 +16,7 @@ from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parents[1]
 _OUT = _ROOT / "configs" / "_blender_n8"
-_DATA_ROOT_WIN = r"D:\SSL\sparse_gs\data\nerf_synthetic"
+_DATA_ROOT_WIN = "data/nerf_synthetic"
 
 _SCENES = ["chair", "drums", "ficus", "hotdog", "materials", "mic", "ship"]
 

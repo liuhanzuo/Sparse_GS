@@ -1,0 +1,47 @@
+# Sparse-GS — runtime dependencies for the training pipeline.
+#
+# Tested environment (see docs/README_legacy.md §2):
+#   Python 3.14.3, PyTorch 2.10.0+cu128, NVIDIA RTX 5090 Laptop, CUDA 13.1.
+#   Linux is supported, but CUDA wheels must match your driver/toolkit.
+#
+# IMPORTANT — install order on a fresh machine:
+#
+#   1) Install PyTorch FIRST, matching your CUDA driver. We do NOT pin a
+#      torch version here because the right wheel depends on the GPU.
+#      Example (cu128, the version we trained with):
+#          pip install torch==2.10.0 torchvision --index-url \
+#              https://download.pytorch.org/whl/cu128
+#
+#   2) Install the rest of the runtime deps:
+#          pip install -r requirements.txt
+#
+#   3) gsplat ships a pure-Python wheel; its CUDA kernels are JIT-compiled
+#      by `ninja` on the first call to `gsplat.rasterization` (1–3 min stall
+#      the very first time). If JIT fails, fall back to:
+#          pip install gsplat --no-build-isolation
+#
+# Optional dev / analysis deps live in requirements-dev.txt.
+
+# --- Rendering & 3D Gaussian Splatting kernels -------------------------------
+gsplat>=1.5.3
+
+# --- Tensor / numerics -------------------------------------------------------
+numpy>=1.21
+# torch  -> install separately, see step (1) above
+# torchvision  -> bundled with torch wheel
+
+# --- Image I/O ---------------------------------------------------------------
+Pillow>=9.3
+imageio>=2.30
+imageio-ffmpeg          # for writing .mp4 turntables
+
+# --- Config / utilities ------------------------------------------------------
+PyYAML>=6.0
+tqdm>=4.65
+
+# --- Depth-Anything-V2 monocular prior ---------------------------------------
+huggingface_hub>=0.20
+transformers>=4.40
+
+# --- Perceptual losses & evaluation ------------------------------------------
+lpips>=0.1.4

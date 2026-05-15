@@ -159,9 +159,23 @@ Sparse_GS_/
 
 ```powershell
 # from inside Sparse_GS_/
-pip install gsplat --no-build-isolation
-pip install pyyaml tqdm imageio "imageio[ffmpeg]" pillow tensorboard lpips
+
+# 1) Install PyTorch first, matching your CUDA driver. We do NOT pin a
+#    torch version because the right wheel depends on the GPU. Example:
+pip install torch==2.10.0 torchvision --index-url https://download.pytorch.org/whl/cu128
+
+# 2) Install the rest of the runtime deps (gsplat, lpips, transformers,
+#    huggingface_hub, imageio, pyyaml, tqdm, pillow, ...):
+pip install -r requirements.txt
+
+# 3) (Optional) extras only needed for dataset downloaders / diagnostic plots:
+pip install -r requirements-dev.txt
 ```
+
+`gsplat` ships a pure-Python wheel; its CUDA kernels are JIT-compiled by
+`ninja` on the first call to `gsplat.rasterization` (1–3 min stall the very
+first time). If JIT fails on your box, fall back to
+`pip install gsplat --no-build-isolation`.
 
 ### 4.2 Data & weights
 
