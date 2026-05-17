@@ -1,0 +1,39 @@
+_base_: ../../../base.yaml
+
+experiment:
+  name: ablation_hotdog_smoke_rand_bg_ON
+
+# 1k-iter smoke test for v8_hard random_background augmentation.
+# 在 hotdog（健康场景）上 ON / OFF 各跑 1000 iter，比较 val/psnr。
+# 预期：random_bg ON 与 OFF 的 1k val PSNR 差距 ≤ 1 dB。
+# 如果暴跌，说明 cam.alpha + 重合成公式有 bug。
+#
+# 这里只测试 random_bg 的实现正确性，所以把 SSL/PVD/coreg/coprune
+# 全关掉，只跑最简单的 photo + DefaultStrategy。
+
+data:
+  scene: hotdog
+  n_train_views: 8
+  random_background_aug:
+    enabled: true
+    prob: 0.5
+
+train:
+  iterations: 1000
+  log_every: 50
+  eval_every: 500          # 在 500 / 1000 各 eval 一次
+  save_every: 1000
+
+# 显式关闭所有可能干扰的东西
+dual_gs:
+  enabled: false
+
+ssl:
+  multiview_photo: {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  pseudo_view:     {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}
+  patch_gan:       {enabled: false, weight: 0.0}
+  pvd:
+    enabled: false
+    weight: 0.0

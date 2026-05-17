@@ -1,0 +1,16 @@
+_base_: ./blender_hotdog_n8_w3_aggrprune_long_v6_pgan70_x45k.yaml
+
+experiment:
+  name: blender_hotdog_n8_w3_aggrprune_long_v7b_pvdweight_only_x45k
+
+# W3-aggrprune-long_v7b_pvdweight_only_x45k (hotdog, ablation B)
+# ============================================================
+# 目的：解耦 v7 的 0.50 dB 提升来自哪部分。
+# 本 ablation B：只把 PVD weight 5e-3 -> 1.2e-2，pseudo 采样保持 v6 默认。
+# 与 v7 对比：差值 = wider_pseudo 提升的边际贡献。
+# 与 x45k 对比：差值 = PVD weight 单独贡献。
+# ============================================================
+
+ssl:
+  pvd:
+    weight: 1.2e-2

@@ -1,0 +1,13 @@
+_base_: ../../blender_ship_n8_w3_aggrprune_long_v7_widerpseudo_x45k.yaml
+
+experiment:
+  name: ablation_ship_A1_rand_bg
+
+# Ablation A1：在 ship v7 x45k 之上只加 random_background_aug，
+# 其它一切（PVD、densify、wide_pseudo）保持 v7 不变。
+# 用来回答：random_bg 单独能带多少 PSNR 提升？
+
+data:
+  random_background_aug:
+    enabled: true
+    prob: 0.5

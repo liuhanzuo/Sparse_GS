@@ -1,0 +1,33 @@
+_base_: ../../../base.yaml
+
+experiment:
+  name: ablation_hotdog_smoke_rand_bg_OFF
+
+# Smoke test 对照组：rand_bg=OFF。其它一切跟 ON 完全一致。
+# 用来确认 random_bg ON 的 1k val PSNR 不会比 OFF 暴跌（≤1 dB）。
+
+data:
+  scene: hotdog
+  n_train_views: 8
+  random_background_aug:
+    enabled: false
+    prob: 0.0
+
+train:
+  iterations: 1000
+  log_every: 50
+  eval_every: 500
+  save_every: 1000
+
+dual_gs:
+  enabled: false
+
+ssl:
+  multiview_photo: {enabled: false, weight: 0.0}
+  depth_consist:   {enabled: false, weight: 0.0}
+  pseudo_view:     {enabled: false, weight: 0.0}
+  feature:         {enabled: false, weight: 0.0}
+  patch_gan:       {enabled: false, weight: 0.0}
+  pvd:
+    enabled: false
+    weight: 0.0

@@ -1,0 +1,61 @@
+_base_: ./blender_chair_n8_w3_aggrprune_long_v6_pgan70.yaml
+
+experiment:
+  name: blender_chair_n8_w3_aggrprune_long_v7_widerpseudo_x45k
+
+# W3-aggrprune-long_v7_widerpseudo_x45k (chair)
+# ============================================================
+# 把 hotdog 上验证有效的 v7 配方 (PSNR 25.90 -> 26.40, +0.50 dB)
+# 应用到 chair。结构 = hotdog_x45k schedule + v7 五参数 override。
+# ============================================================
+
+train:
+  iterations: 45000
+  periodic_ckpt_every: 1500
+  periodic_ckpt_start: 36000
+  save_pre_prune_ckpt: true
+
+strategy:
+  refine_start_iter: 1200
+  refine_stop_iter: 28800
+  prune:
+    unseen:
+      enabled: true
+      start_iter: 4800
+      every_iter: 7200
+      stop_iter: 27600
+    floater:
+      enabled: true
+      start_iter: 9600
+      every_iter: 6000
+      stop_iter: 27600
+      alpha_thresh: 0.5
+      thresh_bin: 0.05
+      thresh_bin_end: 0.01
+      thresh_bin_decay_start: 9600
+      thresh_bin_decay_end: 27600
+      safety_max_ratio: 0.25
+
+dual_gs:
+  coprune: true
+  coprune_threshold: 0.05
+  coprune_start_iter: 3600
+  coprune_stop_iter: 27600
+  coprune_every_iter: 1200
+  safety_max_ratio: 0.20
+  end_sample_pseudo: 45000
+
+pseudo:
+  wide_sampling:
+    mode_probs: [0.3, 0.3, 0.4]
+    extrap_t_range: [-0.5, 1.5]
+    elevation_margin_deg: 20.0
+    radius_jitter: 0.10
+
+ssl:
+  pvd:
+    enabled: true
+    start_iter: 4800
+    weight: 1.2e-2
+    floater_guidance:
+      warmup_iter: 14400
