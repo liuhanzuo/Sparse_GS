@@ -535,11 +535,22 @@ LPIPS metric uses the official `lpips` PyPI package.
 
 ### 7.1 What is currently the recommended training recipe
 
-**`v8_simple` = v7_widerpseudo + `data.random_bg: true` only.** Nothing
-else from `v8_hard` survived ablation. Concretely:
+**`v8_simple` = v7_widerpseudo + `data.random_background_aug` only.**
+Nothing else from `v8_hard` survived ablation. Concretely:
 
 - Start from any `configs/_w3_aggrprune/blender_<scene>_*_v7_widerpseudo_x45k.yaml`.
-- Add a single line under `data:` →  `random_bg: true`.
+- Append the following block to it (the verbatim form is in
+  [`configs/_w3_aggrprune/v8_hard/ablation/ablation_ship_A1_rand_bg.yaml`](configs/_w3_aggrprune/v8_hard/ablation/ablation_ship_A1_rand_bg.yaml)):
+
+  ```yaml
+  data:
+    random_background_aug:
+      enabled: true
+      prob: 0.5      # per-step probability of using a random RGB bg (default 0.5)
+  ```
+
+  ⚠️ The flag is `data.random_background_aug.enabled`, **not** `data.random_bg`.
+  Eval still uses white background regardless of this setting.
 - Keep the v7 prune schedule (`unseen` + decaying `floater`), keep the
   PVD weight 0.012 (full strength), keep 45 k iters.
 - This gave +0.78 dB on ship and +0.11 dB on materials in single-variable
@@ -549,7 +560,7 @@ else from `v8_hard` survived ablation. Concretely:
 
 | Knob                  | Verdict | Evidence |
 |-----------------------|---------|----------|
-| `data.random_bg: true`| ✅ keep | A1 single-var beats v8_hard bundle on both hard scenes |
+| `data.random_background_aug.enabled: true`| ✅ keep | A1 single-var beats v8_hard bundle on both hard scenes |
 | `conservative_prune` (lower thresh, longer warmup) | ❌ drop | A2 ≈ noise on ship (+0.10 dB) |
 | `weak_pvd` (PVD weight × 0.5, later start) | ❌ drop | A3 OOM on ship; A3 *negative* −0.34 dB on materials |
 
@@ -601,9 +612,13 @@ the 3 hard scenes are what's pulling the mean down.
 - DAv2-Small depth cache for all 8 scenes is on disk
   (`data/nerf_synthetic/<scene>/_depth_cache/depth_anything_v2_small/`).
   The trainer reads it via `ssl.depth_consist`.
-- `random_bg` augmentation is implemented in the dataset loader
-  (`sparse_gs/datasets/nerf_synthetic.py`). To enable, just set
-  `data.random_bg: true` — no new code needed.
+- `random_bg` augmentation is implemented in the trainer step itself
+  (`sparse_gs/trainer/trainer.py`, ~L228 + L755 — re-composites GT via
+  `cam.image + (bg-1)·(1-alpha)` per step). To enable, set
+  `data.random_background_aug.enabled: true` (optionally `prob: 0.5`) —
+  no new code needed. Requires `data.type=nerf_synthetic` and
+  `data.white_background=true` (otherwise the trainer prints a warning
+  and stays disabled).
 - `AggressivePruneStrategy` (unseen + decaying floater) is the prune
   path used by every `_w3_aggrprune` config. Don't replace it; tune the
   thresholds.
