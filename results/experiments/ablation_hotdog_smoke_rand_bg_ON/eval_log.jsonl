@@ -1,0 +1,3 @@
+{"step": 500, "phase": "regular", "num_gaussians": 100000, "val/psnr": 19.810803413391113, "val/ssim": 0.8339717835187912}
+{"step": 1000, "phase": "regular", "num_gaussians": 74957, "val/psnr": 20.120185494422913, "val/ssim": 0.8429098352789879}
+{"step": 1000, "phase": "test", "num_gaussians": 74957, "test/psnr": 20.733644008636475, "test/ssim": 0.8627637550234795, "test/lpips": 0.29847365617752075, "wall_clock_sec": 9.616626024246216}

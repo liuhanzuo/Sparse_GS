@@ -1,0 +1,235 @@
+{
+  "experiment": "blender_lego_n8_w3_aggrprune_long_v7_widerpseudo_x60k",
+  "scene": "lego",
+  "n_train_views": 8,
+  "iterations": 60000,
+  "wall_clock_sec": 8218.388593196869,
+  "num_gaussians": 832818,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 23.454855432510374,
+    "test/ssim": 0.8936314085125923,
+    "test/lpips": 0.11664398107677698
+  },
+  "pre_prune_test": {
+    "best": {
+      "label": "final",
+      "step": 60000,
+      "kind": "final",
+      "n_gaussians": 832818,
+      "metrics": {
+        "test/psnr": 23.454855432510374,
+        "test/ssim": 0.8936314085125923,
+        "test/lpips": 0.11664398107677698
+      }
+    },
+    "all": [
+      {
+        "label": "final",
+        "step": 60000,
+        "kind": "final",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.454855432510374,
+          "test/ssim": 0.8936314085125923,
+          "test/lpips": 0.11664398107677698
+        }
+      },
+      {
+        "label": "pre_unseen@4800",
+        "step": 4800,
+        "kind": "unseen",
+        "n_gaussians": 511042,
+        "metrics": {
+          "test/psnr": 21.478438444137574,
+          "test/ssim": 0.8583453813195229,
+          "test/lpips": 0.15396972913295032
+        }
+      },
+      {
+        "label": "pre_unseen@12000",
+        "step": 12000,
+        "kind": "unseen",
+        "n_gaussians": 1001719,
+        "metrics": {
+          "test/psnr": 22.094054460525513,
+          "test/ssim": 0.8817843717336654,
+          "test/lpips": 0.12568881779909133
+        }
+      },
+      {
+        "label": "pre_unseen@19200",
+        "step": 19200,
+        "kind": "unseen",
+        "n_gaussians": 1117772,
+        "metrics": {
+          "test/psnr": 22.514746723175048,
+          "test/ssim": 0.8901697370409966,
+          "test/lpips": 0.11678069027140736
+        }
+      },
+      {
+        "label": "pre_unseen@26400",
+        "step": 26400,
+        "kind": "unseen",
+        "n_gaussians": 1108903,
+        "metrics": {
+          "test/psnr": 22.705558004379274,
+          "test/ssim": 0.8921277299523354,
+          "test/lpips": 0.11543522655963898
+        }
+      },
+      {
+        "label": "pre_floater@27600",
+        "step": 27600,
+        "kind": "floater",
+        "n_gaussians": 1068788,
+        "metrics": {
+          "test/psnr": 22.752689476013185,
+          "test/ssim": 0.8927887818217277,
+          "test/lpips": 0.11500481129623949
+        }
+      },
+      {
+        "label": "pre_unseen@33600",
+        "step": 33600,
+        "kind": "unseen",
+        "n_gaussians": 882706,
+        "metrics": {
+          "test/psnr": 22.877467470169066,
+          "test/ssim": 0.8924146524071693,
+          "test/lpips": 0.11628562734462321
+        }
+      },
+      {
+        "label": "pre_floater@33600",
+        "step": 33600,
+        "kind": "floater",
+        "n_gaussians": 849063,
+        "metrics": {
+          "test/psnr": 22.877897253036497,
+          "test/ssim": 0.8924157598614693,
+          "test/lpips": 0.11628572172485292
+        }
+      },
+      {
+        "label": "pre_periodic@48000",
+        "step": 48000,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.261993732452392,
+          "test/ssim": 0.8941374379396438,
+          "test/lpips": 0.11559660699218512
+        }
+      },
+      {
+        "label": "pre_periodic@49500",
+        "step": 49500,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.281233167648317,
+          "test/ssim": 0.894000495672226,
+          "test/lpips": 0.11566817675717175
+        }
+      },
+      {
+        "label": "pre_periodic@51000",
+        "step": 51000,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.32881541252136,
+          "test/ssim": 0.8940435045957565,
+          "test/lpips": 0.11578625962138175
+        }
+      },
+      {
+        "label": "pre_periodic@52500",
+        "step": 52500,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.366214780807496,
+          "test/ssim": 0.8941060161590576,
+          "test/lpips": 0.11571327353827655
+        }
+      },
+      {
+        "label": "pre_periodic@54000",
+        "step": 54000,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.386117248535157,
+          "test/ssim": 0.8938688161969185,
+          "test/lpips": 0.11618742603808642
+        }
+      },
+      {
+        "label": "pre_periodic@55500",
+        "step": 55500,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.418958215713502,
+          "test/ssim": 0.894101330935955,
+          "test/lpips": 0.11592750355601311
+        }
+      },
+      {
+        "label": "pre_periodic@57000",
+        "step": 57000,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.40820923805237,
+          "test/ssim": 0.8937776425480842,
+          "test/lpips": 0.11629027603194117
+        }
+      },
+      {
+        "label": "pre_periodic@58500",
+        "step": 58500,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.440824146270753,
+          "test/ssim": 0.8940293473005295,
+          "test/lpips": 0.11610329512506723
+        }
+      },
+      {
+        "label": "pre_periodic@60000",
+        "step": 60000,
+        "kind": "periodic",
+        "n_gaussians": 832818,
+        "metrics": {
+          "test/psnr": 23.454855432510374,
+          "test/ssim": 0.8936314085125923,
+          "test/lpips": 0.11664398107677698
+        }
+      }
+    ]
+  },
+  "best_label": "final",
+  "best_step": 60000,
+  "best_n_gaussians": 832818,
+  "best_metrics": {
+    "test/psnr": 23.454855432510374,
+    "test/ssim": 0.8936314085125923,
+    "test/lpips": 0.11664398107677698
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "experiment": "ablation_hotdog_smoke_rand_bg_OFF",
+  "scene": "hotdog",
+  "n_train_views": 8,
+  "iterations": 1000,
+  "wall_clock_sec": 11.545339822769165,
+  "num_gaussians": 85006,
+  "num_test_views_used": 8,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    0,
+    14,
+    28,
+    42,
+    57,
+    71,
+    85,
+    99
+  ],
+  "metrics": {
+    "test/psnr": 20.69559669494629,
+    "test/ssim": 0.8522638007998466,
+    "test/lpips": 0.30962057039141655
+  }
+}

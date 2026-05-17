@@ -1,0 +1,42 @@
+{"step": 2000, "phase": "regular", "num_gaussians": 157732, "val/psnr": 18.210577964782715, "val/ssim": 0.7134681642055511}
+{"step": 4000, "phase": "regular", "num_gaussians": 596161, "val/psnr": 18.55942416191101, "val/ssim": 0.7217782437801361}
+{"step": 4800, "phase": "pre_unseen_prune", "num_gaussians": 749312, "will_prune_n": 15790}
+{"step": 6000, "phase": "regular", "num_gaussians": 928188, "val/psnr": 18.738465547561646, "val/ssim": 0.7270441651344299}
+{"step": 8000, "phase": "regular", "num_gaussians": 1182515, "val/psnr": 18.848119616508484, "val/ssim": 0.7300224676728249}
+{"step": 10000, "phase": "regular", "num_gaussians": 1360458, "val/psnr": 18.903558492660522, "val/ssim": 0.7310058623552322}
+{"step": 12000, "phase": "pre_unseen_prune", "num_gaussians": 1483833, "will_prune_n": 116170}
+{"step": 12000, "phase": "regular", "num_gaussians": 1367541, "val/psnr": 19.018414735794067, "val/ssim": 0.7343311011791229}
+{"step": 14000, "phase": "regular", "num_gaussians": 1460737, "val/psnr": 19.02902102470398, "val/ssim": 0.7349220365285873}
+{"step": 16000, "phase": "regular", "num_gaussians": 1519860, "val/psnr": 19.137879133224487, "val/ssim": 0.7363008037209511}
+{"step": 18000, "phase": "regular", "num_gaussians": 1558252, "val/psnr": 19.19663679599762, "val/ssim": 0.737799808382988}
+{"step": 19200, "phase": "pre_unseen_prune", "num_gaussians": 1574441, "will_prune_n": 136152}
+{"step": 20000, "phase": "regular", "num_gaussians": 1450719, "val/psnr": 19.206815242767334, "val/ssim": 0.7379871904850006}
+{"step": 21600, "phase": "pre_floater_prune", "num_gaussians": 1469513, "will_prune_n": 306601, "thresh_bin": 0.023333333333333338}
+{"step": 22000, "phase": "regular", "num_gaussians": 1191662, "val/psnr": 19.177143931388855, "val/ssim": 0.7359364852309227}
+{"step": 24000, "phase": "regular", "num_gaussians": 1257430, "val/psnr": 19.28621804714203, "val/ssim": 0.7386945486068726}
+{"step": 26000, "phase": "regular", "num_gaussians": 1284035, "val/psnr": 19.328525066375732, "val/ssim": 0.7407554537057877}
+{"step": 26400, "phase": "pre_unseen_prune", "num_gaussians": 1287336, "will_prune_n": 85048}
+{"step": 27600, "phase": "pre_floater_prune", "num_gaussians": 1215355, "will_prune_n": 55095, "thresh_bin": 0.010000000000000002}
+{"step": 28000, "phase": "regular", "num_gaussians": 1174582, "val/psnr": 19.280267000198364, "val/ssim": 0.7396689727902412}
+{"step": 30000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.43829607963562, "val/ssim": 0.7433332428336143}
+{"step": 32000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.538498878479004, "val/ssim": 0.7455488443374634}
+{"step": 34000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.580935955047607, "val/ssim": 0.746852695941925}
+{"step": 36000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.63284957408905, "val/ssim": 0.7489004358649254}
+{"step": 38000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.70911717414856, "val/ssim": 0.7501519471406937}
+{"step": 40000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.734110832214355, "val/ssim": 0.7500846907496452}
+{"step": 42000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.747269988059998, "val/ssim": 0.7503532916307449}
+{"step": 44000, "phase": "regular", "num_gaussians": 1189229, "val/psnr": 19.7697252035141, "val/ssim": 0.7505617067217827}
+{"step": 45000, "phase": "test", "num_gaussians": 1189229, "test/psnr": 17.57475839138031, "test/ssim": 0.7444505897164345, "test/lpips": 0.2825478462874889, "wall_clock_sec": 9539.019419193268}
+{"step": 4800, "phase": "pre_prune_ckpt_test", "num_gaussians": 749312, "test/psnr": 16.869179487228394, "test/ssim": 0.7199470362067223, "test/lpips": 0.33261927500367167, "kind": "unseen", "n_pruned": 15790, "n_gaussians": 749312, "thresh_bin": null, "elapsed_sec": 4.142731428146362}
+{"step": 12000, "phase": "pre_prune_ckpt_test", "num_gaussians": 1483833, "test/psnr": 17.06509648799896, "test/ssim": 0.7308235573768616, "test/lpips": 0.30742931954562663, "kind": "unseen", "n_pruned": 116170, "n_gaussians": 1483833, "thresh_bin": null, "elapsed_sec": 4.4330079555511475}
+{"step": 19200, "phase": "pre_prune_ckpt_test", "num_gaussians": 1574441, "test/psnr": 17.119557514190674, "test/ssim": 0.7332751277089119, "test/lpips": 0.2986533984541893, "kind": "unseen", "n_pruned": 136152, "n_gaussians": 1574441, "thresh_bin": null, "elapsed_sec": 4.449954986572266}
+{"step": 21600, "phase": "pre_prune_ckpt_test", "num_gaussians": 1469513, "test/psnr": 17.09845293045044, "test/ssim": 0.7334617128968239, "test/lpips": 0.29884083032608033, "kind": "floater", "n_pruned": 306601, "n_gaussians": 1469513, "thresh_bin": 0.023333333333333338, "elapsed_sec": 4.426799535751343}
+{"step": 26400, "phase": "pre_prune_ckpt_test", "num_gaussians": 1287336, "test/psnr": 17.212930817604065, "test/ssim": 0.7359107774496079, "test/lpips": 0.29365134112536906, "kind": "unseen", "n_pruned": 85048, "n_gaussians": 1287336, "thresh_bin": null, "elapsed_sec": 4.328136682510376}
+{"step": 27600, "phase": "pre_prune_ckpt_test", "num_gaussians": 1215355, "test/psnr": 17.18505751132965, "test/ssim": 0.7370349639654159, "test/lpips": 0.2938941130042076, "kind": "floater", "n_pruned": 55095, "n_gaussians": 1215355, "thresh_bin": 0.010000000000000002, "elapsed_sec": 4.321414947509766}
+{"step": 36000, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.437660336494446, "test/ssim": 0.7426693943142891, "test/lpips": 0.2848618566989899, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.2807323932647705}
+{"step": 37500, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.495571084022522, "test/ssim": 0.7430890381336213, "test/lpips": 0.2838234119862318, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.268210411071777}
+{"step": 39000, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.517759919166565, "test/ssim": 0.7436587044596672, "test/lpips": 0.282934095710516, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.2890543937683105}
+{"step": 40500, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.534812245368958, "test/ssim": 0.7437458765506745, "test/lpips": 0.28302488118410113, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.2832489013671875}
+{"step": 42000, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.545059585571288, "test/ssim": 0.7441324371099473, "test/lpips": 0.2831036351621151, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.28020453453064}
+{"step": 43500, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.560636382102967, "test/ssim": 0.7442619550228119, "test/lpips": 0.2828603816777468, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.283968448638916}
+{"step": 45000, "phase": "pre_prune_ckpt_test", "num_gaussians": 1189229, "test/psnr": 17.57475839138031, "test/ssim": 0.7444505897164345, "test/lpips": 0.2825478462874889, "kind": "periodic", "n_pruned": 0, "n_gaussians": 1189229, "thresh_bin": null, "elapsed_sec": 4.28990912437439}

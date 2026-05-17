@@ -1,0 +1,191 @@
+{
+  "experiment": "blender_drums_n8_v8_hard_x45k",
+  "scene": "drums",
+  "n_train_views": 8,
+  "iterations": 45000,
+  "wall_clock_sec": 10471.52370762825,
+  "num_gaussians": 1694518,
+  "num_test_views_used": 200,
+  "num_test_views_total": 200,
+  "train_view_ids": [
+    2,
+    16,
+    26,
+    55,
+    73,
+    76,
+    86,
+    93
+  ],
+  "metrics": {
+    "test/psnr": 16.471820821762083,
+    "test/ssim": 0.8423428085446357,
+    "test/lpips": 0.1889781771041453
+  },
+  "pre_prune_test": {
+    "best": {
+      "label": "final",
+      "step": 45000,
+      "kind": "final",
+      "n_gaussians": 1694518,
+      "metrics": {
+        "test/psnr": 16.471820821762083,
+        "test/ssim": 0.8423428085446357,
+        "test/lpips": 0.1889781771041453
+      }
+    },
+    "all": [
+      {
+        "label": "final",
+        "step": 45000,
+        "kind": "final",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.471820821762083,
+          "test/ssim": 0.8423428085446357,
+          "test/lpips": 0.1889781771041453
+        }
+      },
+      {
+        "label": "pre_unseen@4800",
+        "step": 4800,
+        "kind": "unseen",
+        "n_gaussians": 585963,
+        "metrics": {
+          "test/psnr": 15.555574250221252,
+          "test/ssim": 0.811696569621563,
+          "test/lpips": 0.22109218545258044
+        }
+      },
+      {
+        "label": "pre_unseen@12000",
+        "step": 12000,
+        "kind": "unseen",
+        "n_gaussians": 1616914,
+        "metrics": {
+          "test/psnr": 15.647537851333619,
+          "test/ssim": 0.8238875198364258,
+          "test/lpips": 0.20477236915379762
+        }
+      },
+      {
+        "label": "pre_unseen@19200",
+        "step": 19200,
+        "kind": "unseen",
+        "n_gaussians": 2071553,
+        "metrics": {
+          "test/psnr": 15.7089546251297,
+          "test/ssim": 0.8275482806563378,
+          "test/lpips": 0.2015616738051176
+        }
+      },
+      {
+        "label": "pre_unseen@26400",
+        "step": 26400,
+        "kind": "unseen",
+        "n_gaussians": 2112699,
+        "metrics": {
+          "test/psnr": 15.874686436653137,
+          "test/ssim": 0.8324054455757142,
+          "test/lpips": 0.197659691888839
+        }
+      },
+      {
+        "label": "pre_floater@27600",
+        "step": 27600,
+        "kind": "floater",
+        "n_gaussians": 1879337,
+        "metrics": {
+          "test/psnr": 15.921694626808167,
+          "test/ssim": 0.833228562772274,
+          "test/lpips": 0.19699711974710227
+        }
+      },
+      {
+        "label": "pre_periodic@36000",
+        "step": 36000,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.221835479736328,
+          "test/ssim": 0.8385977086424827,
+          "test/lpips": 0.19226661268621684
+        }
+      },
+      {
+        "label": "pre_periodic@37500",
+        "step": 37500,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.270207691192628,
+          "test/ssim": 0.8391139504313468,
+          "test/lpips": 0.19145726826041937
+        }
+      },
+      {
+        "label": "pre_periodic@39000",
+        "step": 39000,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.31613465309143,
+          "test/ssim": 0.8401952630281448,
+          "test/lpips": 0.19044542949646712
+        }
+      },
+      {
+        "label": "pre_periodic@40500",
+        "step": 40500,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.36654269218445,
+          "test/ssim": 0.8407528474926949,
+          "test/lpips": 0.1900150952860713
+        }
+      },
+      {
+        "label": "pre_periodic@42000",
+        "step": 42000,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.402214093208315,
+          "test/ssim": 0.8414102801680565,
+          "test/lpips": 0.18945823207497597
+        }
+      },
+      {
+        "label": "pre_periodic@43500",
+        "step": 43500,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.440479254722597,
+          "test/ssim": 0.8418380007147789,
+          "test/lpips": 0.1890885804593563
+        }
+      },
+      {
+        "label": "pre_periodic@45000",
+        "step": 45000,
+        "kind": "periodic",
+        "n_gaussians": 1694518,
+        "metrics": {
+          "test/psnr": 16.471820821762083,
+          "test/ssim": 0.8423428085446357,
+          "test/lpips": 0.1889781771041453
+        }
+      }
+    ]
+  },
+  "best_label": "final",
+  "best_step": 45000,
+  "best_n_gaussians": 1694518,
+  "best_metrics": {
+    "test/psnr": 16.471820821762083,
+    "test/ssim": 0.8423428085446357,
+    "test/lpips": 0.1889781771041453
+  }
+}
