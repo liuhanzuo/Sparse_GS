@@ -46,6 +46,14 @@ def _ensure_ninja_on_path() -> None:
     if shutil.which("ninja") is not None:
         return
     candidates = []
+    # Highest priority: the Scripts/ directory next to the *current* Python
+    # interpreter. This is the canonical location for any package installed
+    # via ``<env-python> -m pip install ...`` (conda env, venv, plain
+    # virtualenv). It is also what fails to register on Windows when the env
+    # is invoked by absolute path without ``conda activate``.
+    exec_prefix = Path(sys.exec_prefix)
+    candidates.append(exec_prefix / "Scripts")
+    candidates.append(exec_prefix / "bin")  # POSIX-style envs on Windows (rare)
     user_base = site.getuserbase()
     if user_base:
         candidates.append(Path(user_base) / "Scripts")
@@ -271,15 +279,48 @@ def _patch_jit_filter_gcc_only_flags() -> None:
         return out
 
     def _wrapped(*args, **kwargs):
-        # Positional layout (PyTorch 2.10):
-        # 0:name 1:sources 2:extra_cflags 3:extra_cuda_cflags
-        # 4:extra_sycl_cflags 5:extra_ldflags 6:extra_include_paths ...
+        # Filter GCC-only cflags (cl rejects them).
+        # Positional layout (PyTorch >=2.7):
+        #   0:name 1:sources 2:extra_cflags 3:extra_cuda_cflags
+        #   4:extra_sycl_cflags 5:extra_ldflags 6:extra_include_paths
+        #   7:build_directory 8:verbose 9:with_cuda 10:with_sycl ...
+        args = list(args)
         if len(args) >= 3:
-            args = list(args)
             args[2] = _filter(args[2])
-            args = tuple(args)
         if "extra_cflags" in kwargs:
             kwargs["extra_cflags"] = _filter(kwargs["extra_cflags"])
+
+        # Compatibility shim for gsplat 1.5.x on PyTorch >= 2.7.
+        #
+        # gsplat's first attempt passes the *pre-2.7* positional layout
+        # (8 positional args: name, sources, cflags, cuda_cflags, ldflags,
+        # include_paths, build_directory, verbose) plus ``with_cuda``,
+        # ``is_python_module``, ``is_standalone``, ``keep_intermediates`` as
+        # kwargs. Torch 2.7+ inserted ``extra_sycl_cflags`` at index 4, so
+        # the legacy positional list mis-aligns: ``extra_ldflags`` lands on
+        # ``extra_sycl_cflags``'s slot, and the bool ``verbose`` ends up
+        # bound to ``build_directory``, leading to
+        # ``os.path.join(False, 'lock')`` -> TypeError. gsplat's own retry
+        # only catches messages containing ``_jit_compile() missing``,
+        # which is NOT what torch raises here, so the build never starts.
+        #
+        # Fix: detect the legacy fingerprint (8 positional + new sig has
+        # ``extra_sycl_cflags`` at index 4) and re-insert ``None`` at that
+        # position, plus add ``with_sycl=None`` kwarg.
+        try:
+            import inspect                                                 # noqa: PLC0415
+            params = list(inspect.signature(_orig).parameters)
+        except (TypeError, ValueError):                                    # noqa: BLE001
+            params = []
+        if (
+            len(args) == 8
+            and len(params) >= 5
+            and params[4] == "extra_sycl_cflags"
+            and "extra_sycl_cflags" not in kwargs
+        ):
+            args.insert(4, None)  # extra_sycl_cflags
+            if "with_sycl" in params and "with_sycl" not in kwargs:
+                kwargs["with_sycl"] = None
         return _orig(*args, **kwargs)
 
     _cppext._jit_compile = _wrapped

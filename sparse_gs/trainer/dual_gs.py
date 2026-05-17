@@ -187,13 +187,16 @@ class DualTrainer(Trainer):
         self.gaussians.active_sh_degree = active_sh
         self.gaussians2.active_sh_degree = active_sh
 
+        # v8_hard: optionally swap to a random background for this step.
+        bg_step, gt_step = self._sample_train_bg_and_gt(cam)
+
         # ===== gs0: full pipeline (renders + pre/post-backward strategy) =====
         out0 = self.renderer.render(
             self.gaussians,
             viewmat=cam.viewmat, K=cam.K,
             width=cam.width, height=cam.height,
             active_sh_degree=active_sh,
-            background=self.background,
+            background=bg_step,
         )
         info0 = out0["info"]
         self.strategy.step_pre_backward(
@@ -212,7 +215,7 @@ class DualTrainer(Trainer):
             viewmat=cam.viewmat, K=cam.K,
             width=cam.width, height=cam.height,
             active_sh_degree=active_sh,
-            background=self.background,
+            background=bg_step,
         )
         info1 = out1["info"]
         self.strategy2.step_pre_backward(
@@ -224,7 +227,7 @@ class DualTrainer(Trainer):
         )
 
         ssim_lambda = float(self.cfg["train"].get("ssim_lambda", 0.2))
-        gt_rgb = cam.image
+        gt_rgb = gt_step
         photo0 = photometric_loss(out0["rgb"], gt_rgb, ssim_lambda=ssim_lambda)
         photo1 = photometric_loss(out1["rgb"], gt_rgb, ssim_lambda=ssim_lambda)
 
@@ -239,9 +242,9 @@ class DualTrainer(Trainer):
             teacher=self.teacher,
             gaussians=self.gaussians,
             renderer=self.renderer,
-            background=self.background,
+            background=bg_step,
         )
-        adv_term, adv_logs = self._patch_gan_term(step, cam, active_sh, gt_rgb)
+        adv_term, adv_logs = self._patch_gan_term(step, cam, active_sh, gt_rgb, bg=bg_step)
 
         if self.perceptual is not None:
             perc_term, perc_logs = self.perceptual(step, out0["rgb"], gt_rgb)
@@ -268,14 +271,14 @@ class DualTrainer(Trainer):
                 viewmat=pseudo_cam.viewmat, K=pseudo_cam.K,
                 width=pseudo_cam.width, height=pseudo_cam.height,
                 active_sh_degree=active_sh,
-                background=self.background,
+                background=bg_step,
             )
             ps_out1 = self.renderer.render(
                 self.gaussians2,
                 viewmat=pseudo_cam.viewmat, K=pseudo_cam.K,
                 width=pseudo_cam.width, height=pseudo_cam.height,
                 active_sh_degree=active_sh,
-                background=self.background,
+                background=bg_step,
             )
             # warmup: linearly ramp coreg weight over 500 iters after start
             warmup = min(max(

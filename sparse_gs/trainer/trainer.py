@@ -224,6 +224,24 @@ class Trainer:
         else:
             self.background = torch.tensor([0.0, 0.0, 0.0], device=self.device)
 
+        # ---- random-background train-time augmentation (v8_hard) ----
+        # cfg.data.random_background_aug:
+        #   enabled: bool                 (default false)
+        #   prob:    float in [0,1]       (default 0.5; per-step probability of using random bg)
+        # Only meaningful for nerf_synthetic (we need per-pixel alpha to recompose GT).
+        # White-bg eval is *always* preserved -- this only fires inside train_step.
+        rb_cfg = d.get("random_background_aug") or {}
+        self._rand_bg_enabled = bool(rb_cfg.get("enabled", False))
+        self._rand_bg_prob = float(rb_cfg.get("prob", 0.5))
+        self._rand_bg_active = self._rand_bg_enabled and (dtype == "nerf_synthetic") and bool(d.get("white_background", True))
+        if self._rand_bg_enabled and not self._rand_bg_active:
+            print(
+                f"[rand_bg] requested but disabled: dtype={dtype} white_background={bool(d.get('white_background', True))} "
+                "(random_background_aug requires nerf_synthetic + white_background=true)"
+            )
+        elif self._rand_bg_active:
+            print(f"[rand_bg] enabled (prob={self._rand_bg_prob:.2f}); eval still uses white bg")
+
         # ---- TB ----
         try:
             from torch.utils.tensorboard import SummaryWriter
@@ -703,10 +721,12 @@ class Trainer:
     # ------------------------------------------------------------------
     # optional PatchGAN appearance regularization
     # ------------------------------------------------------------------
-    def _patch_gan_term(self, step: int, cam: Camera, active_sh: int, gt_rgb: torch.Tensor) -> tuple[torch.Tensor, Dict[str, float]]:
+    def _patch_gan_term(self, step: int, cam: Camera, active_sh: int, gt_rgb: torch.Tensor,
+                        bg: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Dict[str, float]]:
         if self.patch_gan is None or not self.patch_gan.active(step):
             return torch.zeros((), device=self.device), {}
 
+        bg_use = bg if bg is not None else self.background
         adv_out = self.renderer.render(
             self.gaussians,
             viewmat=cam.viewmat,
@@ -714,7 +734,7 @@ class Trainer:
             width=cam.width,
             height=cam.height,
             active_sh_degree=active_sh,
-            background=self.background,
+            background=bg_use,
             detach_geometry=self.patch_gan.detach_geometry,
         )
         fake_rgb = adv_out["rgb"]
@@ -727,12 +747,42 @@ class Trainer:
         return g_term, logs
 
     # ------------------------------------------------------------------
+    # random background helper (v8_hard)
+    # ------------------------------------------------------------------
+    def _sample_train_bg_and_gt(self, cam: Camera) -> tuple[torch.Tensor, torch.Tensor]:
+        """Pick the per-step background and the corresponding GT image.
+
+        When random_background_aug is OFF (or alpha is missing), returns
+        ``(self.background, cam.image)`` -- identical to the previous behaviour.
+
+        When ON, with probability ``self._rand_bg_prob`` we sample a random RGB
+        background ``bg`` and re-composite GT to that background via
+            gt_new = rgb*a + bg*(1-a)
+                   = (cam.image - 1*(1-a)) + bg*(1-a)        # since cam.image = rgb*a + 1*(1-a)
+                   = cam.image + (bg - 1) * (1 - a)
+        This is exact (no division by alpha) and lossless.
+        """
+        if not self._rand_bg_active:
+            return self.background, cam.image
+        if cam.alpha is None:
+            return self.background, cam.image
+        if random.random() >= self._rand_bg_prob:
+            return self.background, cam.image
+        bg = torch.rand(3, device=self.device, dtype=cam.image.dtype)
+        # cam.alpha is (H, W, 1); broadcasts correctly against (H, W, 3) image.
+        gt_new = cam.image + (bg - 1.0) * (1.0 - cam.alpha)
+        return bg, gt_new
+
+    # ------------------------------------------------------------------
     # one training step
     # ------------------------------------------------------------------
     def train_step(self, step: int, total: int) -> Dict[str, float]:
         cam: Camera = random.choice(self._train_cams_gpu)
         active_sh = self._active_sh_degree(step, total)
         self.gaussians.active_sh_degree = active_sh
+
+        # v8_hard: optionally swap to a random background for this step.
+        bg_step, gt_step = self._sample_train_bg_and_gt(cam)
 
         out = self.renderer.render(
             self.gaussians,
@@ -741,10 +791,9 @@ class Trainer:
             width=cam.width,
             height=cam.height,
             active_sh_degree=active_sh,
-            background=self.background,
+            background=bg_step,
         )
         info = out["info"]
-
         # gsplat expects step_pre_backward to be called before .backward()
         self.strategy.step_pre_backward(
             params=self.gaussians.params,
@@ -756,7 +805,7 @@ class Trainer:
 
         # base photometric loss
         ssim_lambda = float(self.cfg["train"].get("ssim_lambda", 0.2))
-        gt_rgb = cam.image
+        gt_rgb = gt_step
         photo = photometric_loss(out["rgb"], gt_rgb, ssim_lambda=ssim_lambda)
 
         # optional SSL losses (no-ops in the baseline)
@@ -770,10 +819,10 @@ class Trainer:
             teacher=self.teacher,
             gaussians=self.gaussians,
             renderer=self.renderer,
-            background=self.background,
+            background=bg_step,
         )
 
-        adv_term, adv_logs = self._patch_gan_term(step, cam, active_sh, gt_rgb)
+        adv_term, adv_logs = self._patch_gan_term(step, cam, active_sh, gt_rgb, bg=bg_step)
 
         # PVD generator term (optional; weight may be 0 for D-only mode).
         # Note: pvd D step happens *outside* this autograd graph below.
@@ -791,7 +840,7 @@ class Trainer:
                 viewmat=pcam_g.viewmat, K=pcam_g.K,
                 width=pcam_g.width, height=pcam_g.height,
                 active_sh_degree=active_sh,
-                background=self.background,
+                background=bg_step,
                 detach_geometry=self.pvd.detach_geometry,
             )
             if pgen_out.get("rgb", None) is not None:
@@ -823,7 +872,7 @@ class Trainer:
                     viewmat=pcam_d.viewmat, K=pcam_d.K,
                     width=pcam_d.width, height=pcam_d.height,
                     active_sh_degree=active_sh,
-                    background=self.background,
+                    background=bg_step,
                 )
             if pd_out.get("rgb", None) is not None:
                 _, d_logs = self.pvd.discriminator_step(gt_rgb, pd_out["rgb"])
