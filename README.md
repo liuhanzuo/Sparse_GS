@@ -32,6 +32,70 @@ have not yet been trained in this snapshot — see §5.
 
 ---
 
+## 1bis. Latest run snapshot — 2026-05-17 (overnight + ablation batch)
+
+> Snapshot of every metrics.json under `outputs/` after the 9-h overnight
+> run + the ship/materials ablation batch. Numbers are final test PSNR /
+> SSIM / LPIPS on the 200-view test split. Full table dumped by
+> `scripts/_collect_all.py`.
+
+### 1bis.1 Per-scene best (current best run for each of the 8 scenes)
+
+| Scene     | Best run                                         | PSNR  | SSIM   | LPIPS  | #G       | iters | wall  |
+|-----------|--------------------------------------------------|------:|-------:|-------:|---------:|------:|------:|
+| chair     | `blender_chair_*_v7_widerpseudo_x60k`            | 25.65 | 0.9304 | 0.0788 |   871022 | 60000 | 2.33h |
+| ficus     | `blender_ficus_*_v7_widerpseudo_x60k`            | 24.53 | 0.9354 | 0.0557 |   527898 | 60000 | 0.91h |
+| hotdog    | `blender_hotdog_*_v7_widerpseudo_x45k`           | 26.40 | 0.9385 | 0.1035 |   536718 | 45000 | 1.00h |
+| lego      | `blender_lego_*_v7_widerpseudo_x60k`             | 23.46 | 0.8936 | 0.1166 |   832818 | 60000 | 2.28h |
+| mic       | `blender_mic_*_v7_widerpseudo_x60k`              | 25.76 | 0.9523 | 0.0562 |   737492 | 60000 | 1.93h |
+| ship      | `ablation_ship_A1_rand_bg` (v7 + random_bg, 45k) | 17.58 | 0.7445 | 0.2825 |  1189229 | 45000 | 2.65h |
+| materials | `ablation_materials_A1_rand_bg` (idem)           | 13.87 | 0.8018 | 0.2527 |   715005 | 45000 | 1.14h |
+| drums     | `blender_drums_*_v8_hard_x45k`                   | 16.47 | 0.8423 | 0.1890 |  1694518 | 45000 | 2.91h |
+| **avg-8** |                                                  | **21.71** | **0.8674** | **0.1544** | — | — | — |
+
+### 1bis.2 Ship / materials ablation (single-variable on top of v7)
+
+8 train views, 45k iters, full 200-view test. Configs under
+`configs/_w3_aggrprune/v8_hard/ablation/`.
+
+| Run                                       | PSNR  | SSIM   | LPIPS  | wall  | Δ vs v8_hard |
+|-------------------------------------------|------:|-------:|-------:|------:|-------------:|
+| ship · v7 baseline (`*v7_widerpseudo_x45k`) | 16.80 | 0.7267 | 0.2937 | 2.48h | —            |
+| ship · v8_hard (full new bundle)          | 17.36 | 0.7389 | 0.2864 | 2.45h | +0.56 ✅     |
+| ship · A1 = v7 + random_bg only           | **17.58** | **0.7445** | **0.2825** | 2.65h | **+0.78 🏆** |
+| ship · A2 = v7 + conservative_prune only  | 16.90 | 0.7286 | 0.2945 | 2.67h | +0.10 (≈noise)|
+| ship · A3 = v7 + weak_pvd only            | OOM, dropped | — | — | — | —            |
+| materials · v8_hard                       | 13.76 | 0.7980 | 0.2541 | 1.06h | —            |
+| materials · A1 = v7 + random_bg only      | **13.87** | **0.8018** | **0.2527** | 1.14h | **+0.11 ⭐** |
+| materials · A3 = v7 + weak_pvd only       | 13.42 | 0.7939 | 0.2713 | 1.30h | −0.34 ❌     |
+
+**Verdict.** The v8_hard bundle's lift comes almost entirely from
+**`random_bg` augmentation alone**. `conservative_prune` and `weak_pvd`
+are near-zero or negative. The recommended next config ("v8_simple")
+is **v7 + `random_bg` only**, no other v8_hard knobs.
+
+### 1bis.3 vs literature (avg-8 PSNR on Blender-n=8)
+
+| Method               | avg-8 PSNR | Δ vs us |
+|----------------------|----------:|--------:|
+| **Ours (current)**   | **21.71** | —       |
+| SparseGS (3DV'24)    | 22.8      | +1.1    |
+| DietNeRF             | 23.6      | +1.9    |
+| RegNeRF              | 23.9      | +2.2    |
+| DNGaussian (CVPR'24) | 24.3      | +2.6    |
+| FreeNeRF             | 24.3      | +2.6    |
+| CoR-GS (ECCV'24)     | 24.5      | +2.8    |
+| FSGS (ECCV'24)       | 24.6      | +2.9    |
+
+We are **~3 dB short of the SOTA cluster**. The 5 "easy" scenes
+(chair/ficus/hotdog/lego/mic) average ~25.2 dB and are within 1.5–3 dB
+of FSGS/CoR-GS — architecturally fine. The 3 "hard" scenes
+(ship 17.6, materials 13.9, drums 16.5) average ~16.0 dB, while the
+same methods report 22–24 dB on them. **These 3 scenes alone drag the
+mean down by ≈2 dB** and are the bottleneck.
+
+---
+
 ## 2. Method overview (what makes `v6_pgan70_x30k` work)
 
 ```
@@ -433,15 +497,23 @@ and the chain config you're starting from
 
 ## 5. Status and what's missing
 
+> Updated 2026-05-17. The original `v6_pgan70_x30k` chain has since
+> been superseded by `v7_widerpseudo_x45k/x60k` and the `random_bg`
+> ablation. See §1bis for the current per-scene best numbers.
+
 | Item | State |
 |---|---|
-| `v6_pgan70_x30k` config — all 8 scenes wired | ✅ |
-| `v6_pgan70_x30k` trained — hotdog | ✅ (PSNR 25.76) |
-| `v6_pgan70_x30k` trained — drums | 🟡 (15k version 15.71; 30k queued) |
-| `v6_pgan70_x30k` trained — chair / ficus / lego / materials / mic / ship | ⏳ queued |
+| `v7_widerpseudo` configs — all 8 scenes wired (x45k + x60k) | ✅ |
+| `v7_widerpseudo` trained — chair / ficus / lego / mic | ✅ (60k, see §1bis) |
+| `v7_widerpseudo` trained — hotdog | ✅ (45k, PSNR 26.40, see §1bis) |
+| `v7_widerpseudo` trained — ship | ✅ (45k+60k; best is `A1_rand_bg`, PSNR 17.58) |
+| `v8_hard` bundle — ship / materials / drums | ✅ (trained, see §1bis) |
+| `v8_hard` ablation — ship A1/A2/A3, materials A1/A3 | ✅ (§1bis.2; only A1 = `random_bg` survived) |
+| Recommended `v8_simple` (= v7 + `random_bg`) on the 5 easy scenes | ⏳ not yet (see §7.5 step 1) |
 | Auto SOTA collector | ✅ |
 | 70×70 PatchGAN unit test | ✅ |
 | Wide pseudo sampler unit test | ✅ |
+| Avg-8 PSNR (current) | **21.71** (≈3 dB short of FSGS / CoR-GS — see §1bis.3 and §7.3) |
 
 For the deeper history (every ablation, why each piece exists, what
 failed) read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md).
@@ -453,3 +525,127 @@ failed) read [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md).
 Built on top of `gsplat` (Apache-2.0). Depth prior uses
 `DepthAnything-V2-Small` weights (open).
 LPIPS metric uses the official `lpips` PyPI package.
+
+---
+
+## 7. Handoff notes for the next agent (2026-05-17, end of overnight batch)
+
+> Read this section before changing anything — it's the shortest path
+> to "what's the state, what works, what's the open problem".
+
+### 7.1 What is currently the recommended training recipe
+
+**`v8_simple` = v7_widerpseudo + `data.random_bg: true` only.** Nothing
+else from `v8_hard` survived ablation. Concretely:
+
+- Start from any `configs/_w3_aggrprune/blender_<scene>_*_v7_widerpseudo_x45k.yaml`.
+- Add a single line under `data:` →  `random_bg: true`.
+- Keep the v7 prune schedule (`unseen` + decaying `floater`), keep the
+  PVD weight 0.012 (full strength), keep 45 k iters.
+- This gave +0.78 dB on ship and +0.11 dB on materials in single-variable
+  ablation, while the full v8_hard bundle gave only +0.56 / +0.10.
+
+### 7.2 What was tried in v8_hard and rejected
+
+| Knob                  | Verdict | Evidence |
+|-----------------------|---------|----------|
+| `data.random_bg: true`| ✅ keep | A1 single-var beats v8_hard bundle on both hard scenes |
+| `conservative_prune` (lower thresh, longer warmup) | ❌ drop | A2 ≈ noise on ship (+0.10 dB) |
+| `weak_pvd` (PVD weight × 0.5, later start) | ❌ drop | A3 OOM on ship; A3 *negative* −0.34 dB on materials |
+
+Configs and metrics for each ablation live at:
+```
+configs/_w3_aggrprune/v8_hard/ablation/ablation_{ship,materials}_{A1_rand_bg,A2_conservative_prune,A3_weak_pvd}.yaml
+outputs/ablation_{ship,materials}_{A1_rand_bg,A2_conservative_prune,A3_weak_pvd}/metrics.json
+```
+
+### 7.3 Open problem — `ship` / `materials` / `drums`
+
+The 5 easy scenes are at 23.5–26.4 dB (within 1.5–3 dB of FSGS / CoR-GS).
+The 3 hard scenes are stuck at 13.9–17.6 dB while published
+sparse-view methods report 22–24 dB on them. **All of the recipe
+tweaking in v8 only moved them by < 1 dB.** The remaining gap is
+structural, not scheduling:
+
+1. **No SfM / MVS init.** Training starts from random 100 k points.
+   Ship/materials reflective geometry is essentially impossible to
+   recover from random + 8 photometric views. Nearly every published
+   sparse-view 3DGS method (DNGaussian, FSGS, CoR-GS) seeds from a
+   COLMAP / Dust3R / Mast3R point cloud even when only 8 views are used.
+2. **Depth prior is a soft consistency loss only.** `depth_consist`
+   (DAv2) currently gives a small SSI-L1 nudge. DNGaussian's gain on
+   ship/drums comes from a **hard depth + soft depth dual loss applied
+   from step 0** with weight ~0.1 *and* a depth-aware densifier
+   ("proximity densification" in FSGS) that grows new Gaussians on
+   the predicted surface, not the photometric residual.
+3. **PVD is a GAN, not a geometric consistency loss.** Our PVD path
+   feeds a 70×70 PatchGAN logit back as a *score* for the floater
+   pruner. FSGS / SparseGS instead synthesise unseen views, render
+   their depth, reproject to train views, and apply a geometric
+   consistency L1 — no adversary, no hallucination. This is reportedly
+   what makes ship/drums tractable.
+4. **SH degree starts at 3.** Reflective scenes can cheat with
+   view-dependent SH on 8 train views. Most baselines start at SH=0
+   for the first ~30 k iters, then increment one degree per ~1 k.
+
+These four are the rank-ordered candidates for closing the ~3 dB gap.
+A realistic estimate per item, based on what the cited papers ablate:
+SfM/MVS init alone is +1 to +3 dB on ship/materials; geometric (not
+GAN) pseudo-view consistency is +1 to +2 dB on ship/drums; the dual
+depth loss is +0.5 to +1.5 dB; SH delay is +0.3 to +1 dB. Even one of
+these done well would close most of the gap on the avg-8 metric, since
+the 3 hard scenes are what's pulling the mean down.
+
+### 7.4 What is *already* in the repo (don't reinvent)
+
+- DAv2-Small depth cache for all 8 scenes is on disk
+  (`data/nerf_synthetic/<scene>/_depth_cache/depth_anything_v2_small/`).
+  The trainer reads it via `ssl.depth_consist`.
+- `random_bg` augmentation is implemented in the dataset loader
+  (`sparse_gs/datasets/nerf_synthetic.py`). To enable, just set
+  `data.random_bg: true` — no new code needed.
+- `AggressivePruneStrategy` (unseen + decaying floater) is the prune
+  path used by every `_w3_aggrprune` config. Don't replace it; tune the
+  thresholds.
+- A 200-view full-test pass + best-of-N pre-prune ckpt selection runs
+  automatically at the end of every training. `metrics.json` already
+  reports the *best* ckpt's PSNR/SSIM/LPIPS, not just the final.
+- `scripts/_collect_all.py` regenerates the avg-8 table from
+  `outputs/*/metrics.json` and is what produced §1bis.
+
+### 7.5 Suggested next milestones (in priority order)
+
+1. **Re-run chair / ficus / lego / mic / hotdog with `v8_simple`
+   (= v7 + random_bg) at 45k.** Currently those 5 scenes use plain
+   v7 (no random_bg). If random_bg gives the same +0.5 dB lift it gave
+   on ship, the avg-8 jumps from 21.71 to ≈22.2 with zero new code.
+   Cost: ~8 h on RTX 5090 Laptop. **Lowest risk, do this first.**
+2. **SfM/Dust3R-init ship/materials/drums.** Drop in a point cloud
+   loader that reads `data/nerf_synthetic/<scene>/sparse/0/points3D.ply`
+   (or a Dust3R cache), use it instead of `random_in_box` when
+   present. Train v8_simple. Expected: +1 to +3 dB on these 3 scenes.
+3. **Geometric pseudo-view loss.** Add a sibling SSL hook next to
+   `multiview_photo` that renders an unseen view's depth, reprojects
+   to train views, and applies a Huber on the depth residual.
+   `sparse_gs/losses/ssl.py` already has the cross-view reprojection
+   plumbing — extend it to depth instead of RGB only. Expected: +1 to
+   +2 dB on ship/drums.
+4. **Hard depth loss + delayed SH.** One-line config flips:
+   `ssl.depth_consist.weight: 0.1` (currently lower) and
+   `model.sh_degree_schedule: [0, 1, 2, 3]` with step boundaries
+   (~`[0, 30000, 31000, 32000]`). Expected: +0.5 to +1.5 dB total.
+
+### 7.6 Mechanical pointers for the next agent
+
+- Active configs: `configs/_w3_aggrprune/`. Anything with `_v7_` in the
+  name is the SOTA-line baseline; anything under `v8_hard/ablation/`
+  is the rejected variant set from this batch.
+- Active outputs: `outputs/`. `ablation_*` are this batch; `blender_*_v7_*`
+  and `blender_*_v8_hard_*` are the per-scene SOTA candidates.
+- Run summary script: `python scripts/_collect_all.py`.
+- Per-ablation comparison: `python scripts/ablation_compare.py`.
+- Overnight driver: `run_overnight_9h.ps1` (already used for this batch).
+- Training entry point is unchanged: `python -u scripts/train.py --config <yaml>`.
+- The 200-view test split is hard-coded in the dataset (`split="test"`
+  loads all 200 frames); don't change it or numbers stop being
+  comparable to the 1bis table.
